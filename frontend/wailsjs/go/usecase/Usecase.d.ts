@@ -6,6 +6,8 @@ export function GetNodeTree():Promise<model.Node>;
 
 export function OpenFile(arg1:string):Promise<string>;
 
+export function SaveFile(arg1:string,arg2:string):Promise<void>;
+
 export function SetRootPath(arg1:string):Promise<void>;
 
 export function WriteLog(arg1:any):Promise<void>;

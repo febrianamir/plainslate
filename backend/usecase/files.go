@@ -3,7 +3,6 @@ package usecase
 import (
 	"errors"
 	"io"
-	"log"
 	"os"
 	"path/filepath"
 )
@@ -33,21 +32,21 @@ func (u *Usecase) openFile(filepath string) (*os.File, error) {
 	return os.OpenFile(filepath, os.O_RDWR|os.O_CREATE, 0644)
 }
 
-func (u *Usecase) saveFile(filename string, content string) error {
+func (u *Usecase) saveFile(filepath string, content string) error {
 	err := u.checkBaseDirectory()
 	if err != nil {
 		return err
 	}
 
-	if filename == "" {
-		return errors.New("filename is required")
+	if filepath == "" {
+		return errors.New("filepath is required")
 	}
 
-	return os.WriteFile(u.buildFilePath(filename), []byte(content), 0644)
+	return os.WriteFile(filepath, []byte(content), 0644)
 }
 
-func (u *Usecase) OpenFile(filename string) (string, error) {
-	file, err := u.openFile(filename)
+func (u *Usecase) OpenFile(filepath string) (string, error) {
+	file, err := u.openFile(filepath)
 	if err != nil {
 		return "", err
 	}
@@ -58,6 +57,9 @@ func (u *Usecase) OpenFile(filename string) (string, error) {
 	}
 
 	content := string(data)
-	log.Println(">> opened file:", content)
 	return content, err
+}
+
+func (u *Usecase) SaveFile(filepath string, content string) error {
+	return u.saveFile(filepath, content)
 }

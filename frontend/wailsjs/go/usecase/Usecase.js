@@ -10,6 +10,10 @@ export function OpenFile(arg1) {
   return window['go']['usecase']['Usecase']['OpenFile'](arg1);
 }
 
+export function SaveFile(arg1, arg2) {
+  return window['go']['usecase']['Usecase']['SaveFile'](arg1, arg2);
+}
+
 export function SetRootPath(arg1) {
   return window['go']['usecase']['Usecase']['SetRootPath'](arg1);
 }

@@ -1,13 +1,17 @@
 <script>
-  import { OpenFile } from '../../wailsjs/go/usecase/Usecase.js';
+  import { OpenFile, SaveFile } from '../../wailsjs/go/usecase/Usecase.js';
   import { openedFile } from '../stores/global.js';
-  import { createEventDispatcher, onMount, onDestroy } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
+  import { get } from 'svelte/store'
 
   export let value = '# Hello\nThis is a markdown note.';
   export let placeholder = 'Write your markdown here...';
-  export let rows = 25;
+  export let rows = 35;
   export let cols = 100;
+  
   let unsubOpenedFile;
+  let errorMessage = '';
+  let successMessage = '';
 
   onMount(() => {
     unsubOpenedFile = openedFile.subscribe(async (path) => {
@@ -31,16 +35,31 @@
     value = event.target.value;
     dispatchEvent(new CustomEvent('input', { detail: value }));
   };
+
+  const saveFile = async () => {
+    errorMessage = '';
+    successMessage = '';
+    try {
+      let saveFilePath = get(openedFile); 
+      await SaveFile(saveFilePath, value);
+      successMessage = 'Directory saved!';
+    } catch (err) {
+      errorMessage = err.message || 'Failed to save directory.';
+    }
+  };
 </script>
 
-<textarea
-  class="editor-textarea"
-  bind:value
-  rows={rows}
-  cols={cols}
-  placeholder={placeholder}
-  on:input={handleInput}
-></textarea>
+<div>
+  <textarea
+    class="editor-textarea"
+    bind:value
+    rows={rows}
+    cols={cols}
+    placeholder={placeholder}
+    on:input={handleInput}
+  ></textarea>
+  <button on:click={saveFile}>Save</button>
+</div>
 
 <style>
   .editor-textarea {
