@@ -1,4 +1,4 @@
-module temp
+module plainslate
 
 go 1.23
 

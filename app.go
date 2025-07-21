@@ -2,16 +2,20 @@ package main
 
 import (
 	"context"
+	"plainslate/backend/usecase"
 )
 
 // App struct
 type App struct {
-	ctx context.Context
+	ctx     context.Context
+	Usecase *usecase.Usecase
 }
 
 // NewApp creates a new App application struct
-func NewApp() *App {
-	return &App{}
+func NewApp(u *usecase.Usecase) *App {
+	return &App{
+		Usecase: u,
+	}
 }
 
 // startup is called when the app starts. The context is saved
