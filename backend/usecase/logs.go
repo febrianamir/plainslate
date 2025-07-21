@@ -4,6 +4,6 @@ import (
 	"log"
 )
 
-func (u *Usecase) WriteLog(s string) {
-	log.Println(s)
+func (u *Usecase) WriteLog(v any) {
+	log.Println(v)
 }
