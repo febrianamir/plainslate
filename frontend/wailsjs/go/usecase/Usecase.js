@@ -6,12 +6,8 @@ export function GetNodeTree() {
   return window['go']['usecase']['Usecase']['GetNodeTree']();
 }
 
-export function GetOrCreateFile(arg1) {
-  return window['go']['usecase']['Usecase']['GetOrCreateFile'](arg1);
-}
-
-export function SaveFile(arg1, arg2) {
-  return window['go']['usecase']['Usecase']['SaveFile'](arg1, arg2);
+export function OpenFile(arg1) {
+  return window['go']['usecase']['Usecase']['OpenFile'](arg1);
 }
 
 export function SetRootPath(arg1) {

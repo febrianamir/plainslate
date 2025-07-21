@@ -1,11 +1,15 @@
 <script>
   import TreeNode from './TreeNode.svelte';
+  import { openedFile } from '../stores/global.js';
 
   export let node;
   let expanded = node.is_root;
 
   const toggle = () => {
     if (node.type === 'directory') expanded = !expanded;
+    if (node.type === 'file') {
+      openedFile.set(node.path)
+    }
   };
 </script>
 

@@ -2,6 +2,8 @@ package usecase
 
 import (
 	"errors"
+	"io"
+	"log"
 	"os"
 	"path/filepath"
 )
@@ -17,21 +19,21 @@ func (u *Usecase) buildFilePath(filename string) string {
 	return filepath.Join(u.Config.RootPath, filename)
 }
 
-// GetOrCreateFile opens the file for reading/writing and creates it if it doesn't exist.
-func (u *Usecase) GetOrCreateFile(filename string) (*os.File, error) {
+// openFile open/create file it if it doesn't exist.
+func (u *Usecase) openFile(filepath string) (*os.File, error) {
 	err := u.checkBaseDirectory()
 	if err != nil {
 		return nil, err
 	}
 
-	if filename == "" {
-		return nil, errors.New("filename is required")
+	if filepath == "" {
+		return nil, errors.New("filepath is required")
 	}
 
-	return os.OpenFile(u.buildFilePath(filename), os.O_RDWR|os.O_CREATE, 0644)
+	return os.OpenFile(filepath, os.O_RDWR|os.O_CREATE, 0644)
 }
 
-func (u *Usecase) SaveFile(filename string, content string) error {
+func (u *Usecase) saveFile(filename string, content string) error {
 	err := u.checkBaseDirectory()
 	if err != nil {
 		return err
@@ -42,4 +44,20 @@ func (u *Usecase) SaveFile(filename string, content string) error {
 	}
 
 	return os.WriteFile(u.buildFilePath(filename), []byte(content), 0644)
+}
+
+func (u *Usecase) OpenFile(filename string) (string, error) {
+	file, err := u.openFile(filename)
+	if err != nil {
+		return "", err
+	}
+
+	data, err := io.ReadAll(file)
+	if err != nil {
+		return "", err
+	}
+
+	content := string(data)
+	log.Println(">> opened file:", content)
+	return content, err
 }
