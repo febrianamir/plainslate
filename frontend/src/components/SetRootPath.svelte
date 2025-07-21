@@ -1,20 +1,20 @@
 <script>
-  import { SetRootPath } from '../../wailsjs/go/usecase/Usecase.js';
-  import { rootPath } from '../stores/global.js';
+  import { SetRootPath } from '../../wailsjs/go/usecase/Usecase.js'
+  import { rootPath } from '../stores/global.js'
 
-  let path = '';
-  let errorMessage = '';
-  let successMessage = '';
+  let path = ''
+  let errorMessage = ''
+  let successMessage = ''
 
   async function savePath() {
-    errorMessage = '';
-    successMessage = '';
+    errorMessage = ''
+    successMessage = ''
     try {
-      await SetRootPath(path);
-      successMessage = 'Directory saved!';
+      await SetRootPath(path)
+      successMessage = 'Directory saved!'
       rootPath.set(path)
     } catch (err) {
-      errorMessage = err.message || 'Failed to save directory.';
+      errorMessage = err.message || 'Failed to save directory.'
     }
   }
 </script>

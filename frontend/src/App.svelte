@@ -1,7 +1,7 @@
 <script>
-  import SetRootPath from "./components/SetRootPath.svelte";
-  import DirectoryTree from "./components/DirectoryTree.svelte";
-  import Editor from "./components/Editor.svelte";
+  import SetRootPath from './components/SetRootPath.svelte'
+  import DirectoryTree from './components/DirectoryTree.svelte'
+  import Editor from './components/Editor.svelte'
 </script>
 
 <div class="main-section">

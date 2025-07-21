@@ -1,26 +1,26 @@
 <script>
-  import { OpenFile, SaveFile } from '../../wailsjs/go/usecase/Usecase.js';
-  import { openedFile } from '../stores/global.js';
-  import { onMount, onDestroy } from 'svelte';
+  import { OpenFile, SaveFile } from '../../wailsjs/go/usecase/Usecase.js'
+  import { openedFile } from '../stores/global.js'
+  import { onMount, onDestroy } from 'svelte'
   import { get } from 'svelte/store'
 
-  export let value = '# Hello\nThis is a markdown note.';
-  export let placeholder = 'Write your markdown here...';
-  export let rows = 35;
-  export let cols = 100;
-  
-  let unsubOpenedFile;
-  let errorMessage = '';
-  let successMessage = '';
+  export let value = '# Hello\nThis is a markdown note.'
+  export let placeholder = 'Write your markdown here...'
+  export let rows = 35
+  export let cols = 100
+
+  let unsubOpenedFile
+  let errorMessage = ''
+  let successMessage = ''
 
   onMount(() => {
-    unsubOpenedFile = openedFile.subscribe(async (path) => {
-      if (path && path.trim() !== "") {
+    unsubOpenedFile = openedFile.subscribe(async path => {
+      if (path && path.trim() !== '') {
         try {
           const result = await OpenFile(path)
           value = result
         } catch (err) {
-          console.error("Error fetching file:", err)
+          console.error('Error fetching file:', err)
           value = ''
         }
       }
@@ -31,28 +31,28 @@
     unsubOpenedFile?.()
   })
 
-  const handleInput = (event) => {
-    value = event.target.value;
-    dispatchEvent(new CustomEvent('input', { detail: value }));
-  };
+  const handleInput = event => {
+    value = event.target.value
+    dispatchEvent(new CustomEvent('input', { detail: value }))
+  }
 
   const saveFile = async () => {
-    errorMessage = '';
-    successMessage = '';
+    errorMessage = ''
+    successMessage = ''
     try {
-      let saveFilePath = get(openedFile); 
-      await SaveFile(saveFilePath, value);
-      successMessage = 'Directory saved!';
+      let saveFilePath = get(openedFile)
+      await SaveFile(saveFilePath, value)
+      successMessage = 'Directory saved!'
     } catch (err) {
-      errorMessage = err.message || 'Failed to save directory.';
+      errorMessage = err.message || 'Failed to save directory.'
     }
-  };
+  }
 </script>
 
 <div>
   <textarea
     class="editor-textarea"
-    bind:value
+    bind:value={value}
     rows={rows}
     cols={cols}
     placeholder={placeholder}
