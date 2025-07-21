@@ -19,7 +19,8 @@ func main() {
 	defer lib.CloseLogFile()
 
 	// Create an instance of the app structure
-	u := usecase.NewUsecase()
+	c := lib.NewConfig()
+	u := usecase.NewUsecase(c)
 	app := NewApp(u)
 
 	// Create application with options
