@@ -1,25 +1,45 @@
 <script>
+  import { Folder, FolderOpen, File } from 'lucide-svelte'
   import TreeNode from './TreeNode.svelte'
   import { openedFile } from '../stores/global.js'
 
   export let node
   let expanded = node.is_root
 
-  const toggle = () => {
-    if (node.type === 'directory') expanded = !expanded
-    if (node.type === 'file') {
-      openedFile.set(node.path)
+  const onClickNode = () => {
+    if (node.type === 'directory') {
+      toggleExpand()
     }
+    if (node.type === 'file') {
+      openFile()
+    }
+  }
+
+  const toggleExpand = () => {
+    expanded = !expanded
+  }
+
+  const openFile = () => {
+    openedFile.set(node.path)
   }
 </script>
 
-<div class="node" style="margin-left: 1rem;">
-  <div on:click={toggle} style="cursor: pointer;">
-    {#if node.type === 'directory'}
-      {expanded ? '📂' : '📁'} {node.name}
-    {:else}
-      📄 {node.name}
-    {/if}
+<div class="node">
+  <div on:click={onClickNode} class="node-content">
+    <div class="node-icon">
+      {#if node.type === 'directory'}
+        {#if expanded}
+          <FolderOpen size={16} />
+        {:else}
+          <Folder size={16} />
+        {/if}
+      {:else}
+        <File size={16} />
+      {/if}
+    </div>
+    <div class="node-text">
+      {node.name}
+    </div>
   </div>
 
   {#if expanded && node.children}
@@ -34,6 +54,14 @@
 <style>
   .node {
     font-family: monospace;
-    line-height: 1.5;
+    margin-left: 1rem;
+  }
+
+  .node-content {
+    display: flex;
+    column-gap: 0.25rem;
+    min-height: 1rem;
+    margin-bottom: 0.3rem;
+    cursor: pointer;
   }
 </style>

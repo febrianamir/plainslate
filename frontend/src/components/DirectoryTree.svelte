@@ -27,6 +27,8 @@
   })
 </script>
 
-{#if tree}
-  <TreeNode node={tree} />
-{/if}
+<div class="directory-tree">
+  {#if tree}
+    <TreeNode node={tree} />
+  {/if}
+</div>

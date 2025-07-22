@@ -1,7 +1,7 @@
 <script>
   import SetRootPath from './components/SetRootPath.svelte'
-  import DirectoryTree from './components/DirectoryTree.svelte'
   import Editor from './components/Editor.svelte'
+  import Sidebar from './components/sidebar/Sidebar.svelte'
 </script>
 
 <div class="main-section">
@@ -10,9 +10,7 @@
     <SetRootPath />
   </div>
   <div class="section-2">
-    <div class="directory-tree">
-      <DirectoryTree />
-    </div>
+    <Sidebar />
     <div class="editor">
       <Editor />
     </div>
