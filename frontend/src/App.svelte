@@ -20,6 +20,7 @@
 <style>
   .section-2 {
     display: flex;
+    height: 100vh;
   }
 
   .section-2 .directory-tree {
