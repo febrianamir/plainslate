@@ -15,7 +15,15 @@ body {
 
 @font-face {
   font-family: 'Inter';
-  src: url('assets/fonts/InterVariable.woff2') format('woff2-variations');
+  src: url('assets/fonts/Inter/InterVariable.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('assets/fonts/JetBrainsMono/JetBrainsMono[wght].ttf') format('truetype');
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;

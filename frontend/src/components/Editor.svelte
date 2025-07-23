@@ -49,7 +49,7 @@
   }
 </script>
 
-<div>
+<div class="editor">
   <textarea
     class="editor-textarea"
     bind:value={value}
@@ -62,16 +62,23 @@
 </div>
 
 <style>
+  .editor {
+    height: 100vh;
+  }
+
   .editor-textarea {
-    background-color: rgb(34, 34, 34);
-    color: rgb(210, 210, 210);
+    all: unset; /* Resets most browser default styles */
     width: 100%;
     height: 100%;
-    min-height: 400px;
-    font-family: monospace;
-    font-size: 1rem;
-    padding: 1rem;
-    box-sizing: border-box;
-    resize: vertical;
+    resize: none;
+    font-size: 0.85rem;
+    font-family: 'JetBrains Mono', monospace;
+    white-space: pre-wrap; /* Preserve newlines */
+    overflow-wrap: break-word;
+    padding: 2rem;
+    background: #282828;
+    color: #cccccc;
+    outline: none;
+    box-shadow: none;
   }
 </style>

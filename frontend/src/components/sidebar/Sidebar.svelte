@@ -48,6 +48,6 @@
     cursor: ew-resize;
     height: 100%;
     flex-shrink: 0;
-    background-color: #282828;
+    background-color: #1e1e1e;
   }
 </style>
