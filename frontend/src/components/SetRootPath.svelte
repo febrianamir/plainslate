@@ -6,7 +6,7 @@
   let errorMessage = ''
   let successMessage = ''
 
-  async function savePath() {
+  const handleSavePath = async () => {
     errorMessage = ''
     successMessage = ''
     try {
@@ -17,6 +17,12 @@
       errorMessage = err.message || 'Failed to save directory.'
     }
   }
+
+  const onKeyDown = async e => {
+    if (e.key === 'Enter') {
+      await handleSavePath()
+    }
+  }
 </script>
 
 <div class="config-root-path">
@@ -25,8 +31,8 @@
     bind:value={path}
     placeholder="Enter directory path"
     style="flex: 1; padding: 0.5rem;"
+    on:keydown={onKeyDown}
   />
-  <button on:click={savePath}>Save</button>
 </div>
 
 {#if errorMessage}

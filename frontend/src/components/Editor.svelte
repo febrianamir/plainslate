@@ -31,11 +31,11 @@
     }
   }
 
-  const onKeyDown = e => {
+  const onKeyDown = async e => {
     if ((e.ctrlKey || e.metaKey) && e.key === 's') {
       // Ctrl+S or Command+S for MacOS
       e.preventDefault()
-      handleSave()
+      await handleSave()
     }
   }
 
