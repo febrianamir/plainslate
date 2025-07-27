@@ -19,7 +19,7 @@
   }
 </script>
 
-<div style="display: flex; gap: 0.5rem; align-items: center;">
+<div class="config-root-path">
   <input
     type="text"
     bind:value={path}
@@ -36,3 +36,12 @@
 {#if successMessage}
   <p style="color: green; margin-top: 0.5rem;">{successMessage}</p>
 {/if}
+
+<style>
+  .config-root-path {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0 1rem 1rem 1rem;
+  }
+</style>
