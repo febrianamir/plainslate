@@ -1,6 +1,7 @@
 <script>
   import { SetRootPath } from '../../wailsjs/go/usecase/Usecase.js'
   import { rootPath } from '../stores/global.js'
+  import { onMount } from 'svelte'
 
   let path = ''
   let errorMessage = ''
@@ -23,6 +24,16 @@
       await handleSavePath()
     }
   }
+
+  onMount(() => {
+    let unsubRootPath = rootPath.subscribe(async dir => {
+      // Set initial input value from rootPath store (populated from config file on startup)
+      if (dir) {
+        path = dir
+        unsubRootPath?.()
+      }
+    })
+  })
 </script>
 
 <div class="config-root-path">

@@ -19,12 +19,15 @@ func main() {
 	defer lib.CloseLogFile()
 
 	// Create an instance of the app structure
-	c := lib.NewConfig()
+	c, err := lib.NewConfig()
+	if err != nil {
+		log.Fatal("Failed to load config:", err)
+	}
 	u := usecase.NewUsecase(c)
 	app := NewApp(u)
 
 	// Create application with options
-	err := wails.Run(&options.App{
+	err = wails.Run(&options.App{
 		Title: "plainslate",
 		// -1 set the window size to the current screen resolution, not exactly the entire screen
 		Width:  -1,

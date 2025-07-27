@@ -1,3 +1,20 @@
+export namespace lib {
+	
+	export class Config {
+	    root_path: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new Config(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.root_path = source["root_path"];
+	    }
+	}
+
+}
+
 export namespace model {
 	
 	export class Node {
