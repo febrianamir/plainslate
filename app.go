@@ -7,7 +7,7 @@ import (
 
 // App struct
 type App struct {
-	ctx     context.Context
+	Ctx     context.Context
 	Usecase *usecase.Usecase
 }
 
@@ -21,5 +21,6 @@ func NewApp(u *usecase.Usecase) *App {
 // startup is called when the app starts. The context is saved
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
-	a.ctx = ctx
+	a.Ctx = ctx
+	a.Usecase.Ctx = a.Ctx
 }

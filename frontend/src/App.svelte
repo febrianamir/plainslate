@@ -11,23 +11,16 @@
   </div>
   <div class="section-2">
     <Sidebar />
-    <div class="editor">
-      <Editor />
-    </div>
+    <Editor />
   </div>
 </div>
 
 <style>
   .section-2 {
     display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    width: 100%;
     height: 100vh;
-  }
-
-  .section-2 .directory-tree {
-    width: 20%;
-  }
-
-  .section-2 .editor {
-    width: 80%;
   }
 </style>

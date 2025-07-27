@@ -1,8 +1,12 @@
 package usecase
 
-import "plainslate/backend/lib"
+import (
+	"context"
+	"plainslate/backend/lib"
+)
 
 type Usecase struct {
+	Ctx    context.Context
 	Config *lib.Config
 }
 

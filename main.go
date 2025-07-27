@@ -25,9 +25,10 @@ func main() {
 
 	// Create application with options
 	err := wails.Run(&options.App{
-		Title:  "plainslate",
-		Width:  1024,
-		Height: 768,
+		Title: "plainslate",
+		// -1 set the window size to the current screen resolution, not exactly the entire screen
+		Width:  -1,
+		Height: -1,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},

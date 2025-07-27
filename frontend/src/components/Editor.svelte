@@ -86,6 +86,7 @@
     flex-direction: column;
     height: 100vh;
     overflow: hidden;
+    flex: 1;
   }
 
   .editor-tab {
