@@ -13,4 +13,4 @@ export function SaveFile(arg1:string,arg2:string):Promise<void>;
 
 export function SetRootPath(arg1:string):Promise<void>;
 
-export function WriteLog(arg1:any):Promise<void>;
+export function WriteLog(arg1:string,arg2:Record<string, any>):Promise<void>;

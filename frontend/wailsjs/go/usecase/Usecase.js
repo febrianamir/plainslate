@@ -22,6 +22,6 @@ export function SetRootPath(arg1) {
   return window['go']['usecase']['Usecase']['SetRootPath'](arg1);
 }
 
-export function WriteLog(arg1) {
-  return window['go']['usecase']['Usecase']['WriteLog'](arg1);
+export function WriteLog(arg1, arg2) {
+  return window['go']['usecase']['Usecase']['WriteLog'](arg1, arg2);
 }

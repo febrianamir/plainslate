@@ -1,14 +1,15 @@
 package main
 
 import (
+	"context"
 	"embed"
-	"log"
 	"plainslate/backend/lib"
 	"plainslate/backend/usecase"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
+	"go.uber.org/zap"
 )
 
 //go:embed all:frontend/dist
@@ -16,12 +17,15 @@ var assets embed.FS
 
 func main() {
 	lib.InitLogger()
-	defer lib.CloseLogFile()
+	defer lib.CloseLogger()
 
 	// Create an instance of the app structure
+	ctx := context.Background()
 	c, err := lib.NewConfig()
 	if err != nil {
-		log.Fatal("Failed to load config:", err)
+		lib.LogFatal(ctx, "failed to load config",
+			zap.Error(err),
+		)
 	}
 	u := usecase.NewUsecase(c)
 	app := NewApp(u)
@@ -44,8 +48,10 @@ func main() {
 	})
 
 	if err != nil {
-		log.Fatal(err)
+		lib.LogFatal(ctx, "failed to run app",
+			zap.Error(err),
+		)
 	} else {
-		log.Println("[INFO] plainslate running")
+		lib.LogInfo(ctx, "app running")
 	}
 }

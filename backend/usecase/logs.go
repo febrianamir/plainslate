@@ -1,9 +1,23 @@
 package usecase
 
 import (
-	"log"
+	"plainslate/backend/lib"
+
+	"go.uber.org/zap"
 )
 
-func (u *Usecase) WriteLog(v any) {
-	log.Println(v)
+func (u *Usecase) WriteLog(level string, logFields map[string]any) {
+	var msg string
+	fields := []zap.Field{}
+
+	for key, v := range logFields {
+		if key == "msg" {
+			msg = v.(string)
+		} else {
+			fields = append(fields, zap.Any(key, v))
+		}
+	}
+
+	fields = append(fields, zap.String("component", "frontend"))
+	lib.CommonLog(u.Ctx, level, msg, fields...)
 }
