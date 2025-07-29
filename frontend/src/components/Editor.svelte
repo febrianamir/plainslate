@@ -5,7 +5,9 @@
   import { get } from 'svelte/store'
 
   export let filename = 'Untitled'
-  export let value = '# Hello\nThis is a markdown note.'
+  export let value = ''
+  export let originalValue = ''
+  export let isDirty = false
   export let placeholder = 'Write your markdown here...'
   export let rows = 35
   export let cols = 100
@@ -16,18 +18,24 @@
 
   const handleInput = e => {
     value = e.target.value
+    isDirty = value !== originalValue
     dispatchEvent(new CustomEvent('input', { detail: value }))
   }
 
   const handleSave = async () => {
-    errorMessage = ''
-    successMessage = ''
-    try {
-      let saveFilePath = get(openedFile)
-      await SaveFile(saveFilePath, value)
-      successMessage = 'Directory saved!'
-    } catch (err) {
-      errorMessage = err.message || 'Failed to save directory.'
+    // Only save changed files
+    if (isDirty) {
+      errorMessage = ''
+      successMessage = ''
+      try {
+        let saveFilePath = get(openedFile)
+        await SaveFile(saveFilePath, value)
+        successMessage = 'File saved!'
+        originalValue = value
+        isDirty = false
+      } catch (err) {
+        errorMessage = err.message || 'Failed to save file.'
+      }
     }
   }
 
@@ -46,6 +54,8 @@
         try {
           const result = await OpenFile(path)
           value = result
+          originalValue = result
+          isDirty = false
         } catch (err) {
           console.error('Error fetching file:', err)
           value = ''
@@ -67,7 +77,10 @@
 <div class="editor">
   <div class="editor-tab">
     <div class="editor-tab-item">
-      {filename}
+      <div class="editor-tab-text">
+        {filename}
+      </div>
+      <div class="editor-tab-indicator" class:active={isDirty}></div>
     </div>
   </div>
   <textarea
@@ -95,12 +108,25 @@
   }
 
   .editor-tab-item {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
     position: relative;
     cursor: pointer;
     font-size: 0.85rem;
-    padding: 0.5rem 0.75rem;
+    padding: 0.5rem 0.4rem 0.5rem 0.7rem;
     color: #9d9d9d;
+  }
+
+  .editor-tab-indicator {
+    margin-top: 1px;
+    width: 5px;
+    height: 5px;
+    border-radius: 5px;
+  }
+
+  .editor-tab-indicator.active {
+    background-color: #c9e6c1;
   }
 
   .editor-tab-item::after {
