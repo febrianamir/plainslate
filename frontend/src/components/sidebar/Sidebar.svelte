@@ -27,7 +27,7 @@
 
 <div class="sidebar">
   <div class="sidebar-content" style="width: {width}px">
-    <p class="sidebar-appname">plainslate</p>
+    <p class="sidebar-appname">PlainSlate</p>
     <SetRootPath />
     <Tree />
   </div>
