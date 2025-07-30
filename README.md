@@ -1,8 +1,8 @@
-# README
+# PlainSlate
 
 ## About
 
-This is the official Wails Svelte template.
+PlainSlate is a desktop note-taking app with Markdown support.
 
 ## Live Development
 
