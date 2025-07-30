@@ -1,7 +1,7 @@
 <script>
   import { Folder, FolderOpen, File } from 'lucide-svelte'
   import TreeNode from './TreeNode.svelte'
-  import { openedFile } from '../stores/global.js'
+  import { openedFile } from '../../../stores/global.js'
   import { onMount, onDestroy } from 'svelte'
 
   export let node

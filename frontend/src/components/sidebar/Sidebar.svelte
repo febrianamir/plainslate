@@ -1,5 +1,5 @@
 <script>
-  import DirectoryTree from '../DirectoryTree.svelte'
+  import Tree from './tree/Tree.svelte'
   import SetRootPath from '../SetRootPath.svelte'
 
   let width = 250
@@ -29,7 +29,7 @@
   <div class="sidebar-content" style="width: {width}px">
     <p class="sidebar-appname">plainslate</p>
     <SetRootPath />
-    <DirectoryTree />
+    <Tree />
   </div>
   <div class="sidebar-resizer" on:mousedown={startResize}></div>
 </div>

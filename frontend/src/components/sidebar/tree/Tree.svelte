@@ -1,8 +1,8 @@
 <script>
   import TreeNode from './TreeNode.svelte'
 
-  import { GetNodeTree } from '../../wailsjs/go/usecase/Usecase.js'
-  import { rootPath } from '../stores/global.js'
+  import { GetNodeTree } from '../../../../wailsjs/go/usecase/Usecase.js'
+  import { rootPath } from '../../../stores/global.js'
   import { onMount, onDestroy } from 'svelte'
 
   let unsubRootPath
