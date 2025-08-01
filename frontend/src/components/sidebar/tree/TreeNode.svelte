@@ -5,10 +5,16 @@
   import { onMount, onDestroy } from 'svelte'
 
   export let node
+  export let showContextMenu = false
+  export let handleCloseContextMenu = () => {}
   export let onRightClick = () => {}
   let expanded = node.is_root
 
   const onClick = () => {
+    if (showContextMenu) {
+      return handleCloseContextMenu()
+    }
+
     if (node.type === 'directory') {
       handleToggleExpand()
     }
@@ -59,7 +65,12 @@
   {#if expanded && node.children}
     <div>
       {#each node.children as child}
-        <TreeNode node={child} onRightClick={onRightClick} />
+        <TreeNode
+          node={child}
+          onRightClick={onRightClick}
+          showContextMenu={showContextMenu}
+          handleCloseContextMenu={handleCloseContextMenu}
+        />
       {/each}
     </div>
   {/if}

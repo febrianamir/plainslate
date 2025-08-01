@@ -36,7 +36,11 @@
 
   const onRightClick = (node, e) => {
     e.preventDefault()
-    return handleOpenContextMenu(node, e)
+
+    if (!showContextMenu) {
+      return handleOpenContextMenu(node, e)
+    }
+    handleCloseContextMenu(node, e)
   }
 
   const handleOpenContextMenu = (node, e) => {
@@ -60,7 +64,12 @@
 
 <div class="directory-tree">
   {#if tree}
-    <TreeNode node={tree} onRightClick={onRightClick} />
+    <TreeNode
+      node={tree}
+      onRightClick={onRightClick}
+      showContextMenu={showContextMenu}
+      handleCloseContextMenu={handleCloseContextMenu}
+    />
   {/if}
 
   {#if showContextMenu}
