@@ -9,7 +9,7 @@
   let tree = null
 
   onMount(() => {
-    unsubRootPath = rootPath.subscribe(async dir => {
+    unsubRootPath = rootPath.subscribe(async (dir) => {
       if (dir && dir.trim() !== '') {
         try {
           const result = await GetNodeTree()

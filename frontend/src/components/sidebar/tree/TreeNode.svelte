@@ -29,7 +29,7 @@
     }
   }
 
-  const onRightClick = e => {
+  const onRightClick = (e) => {
     e.preventDefault()
     handleOpenContextMenu(e)
   }
@@ -42,7 +42,7 @@
     openedFile.set(node.path)
   }
 
-  const handleOpenContextMenu = e => {
+  const handleOpenContextMenu = (e) => {
     contextMenuX = e.clientX
     contextMenuY = e.clientY
     showContextMenu = true
@@ -64,7 +64,7 @@
     class="node-content"
     on:click={onClick}
     on:contextmenu={onRightClick}
-    on:keydown={e => {
+    on:keydown={(e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault()
         onClick()
@@ -94,7 +94,7 @@
         tabindex="0"
         class="node-context-item"
         on:click={handleCreateNewFile}
-        on:keydown={e => {
+        on:keydown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault()
             handleCreateNewFile()
@@ -108,7 +108,7 @@
         tabindex="0"
         class="node-context-item"
         on:click={handleCreateNewDirectory}
-        on:keydown={e => {
+        on:keydown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault()
             handleCreateNewDirectory()

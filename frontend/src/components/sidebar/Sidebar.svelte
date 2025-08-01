@@ -5,12 +5,12 @@
   let width = 250
   let isResizing = false
 
-  const startResize = e => {
+  const startResize = (e) => {
     isResizing = true
     e.preventDefault()
   }
 
-  const onMouseMove = e => {
+  const onMouseMove = (e) => {
     if (isResizing) {
       width = Math.max(200, e.clientX) // Minimum width = 200px
     }

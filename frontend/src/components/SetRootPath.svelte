@@ -19,14 +19,14 @@
     }
   }
 
-  const onKeyDown = async e => {
+  const onKeyDown = async (e) => {
     if (e.key === 'Enter') {
       await handleSavePath()
     }
   }
 
   onMount(() => {
-    let unsubRootPath = rootPath.subscribe(async dir => {
+    let unsubRootPath = rootPath.subscribe(async (dir) => {
       // Set initial input value from rootPath store (populated from config file on startup)
       if (dir) {
         path = dir

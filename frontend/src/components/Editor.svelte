@@ -16,7 +16,7 @@
   let errorMessage = ''
   let successMessage = ''
 
-  const handleInput = e => {
+  const handleInput = (e) => {
     value = e.target.value
     isDirty = value !== originalValue
     dispatchEvent(new CustomEvent('input', { detail: value }))
@@ -39,7 +39,7 @@
     }
   }
 
-  const onKeyDown = async e => {
+  const onKeyDown = async (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 's') {
       // Ctrl+S or Command+S for MacOS
       e.preventDefault()
@@ -48,7 +48,7 @@
   }
 
   onMount(() => {
-    unsubOpenedFile = openedFile.subscribe(async path => {
+    unsubOpenedFile = openedFile.subscribe(async (path) => {
       if (path && path.trim() !== '') {
         // Open file
         try {
