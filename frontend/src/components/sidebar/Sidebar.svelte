@@ -31,7 +31,7 @@
     <SetRootPath />
     <Tree />
   </div>
-  <div class="sidebar-resizer" on:mousedown={startResize}></div>
+  <div class="sidebar-resizer" class:active={isResizing} on:mousedown={startResize}></div>
 </div>
 
 <style>
@@ -52,10 +52,15 @@
   }
 
   .sidebar-resizer {
-    width: 5px;
+    width: 2px;
     cursor: ew-resize;
     height: 100%;
     flex-shrink: 0;
     background-color: #1e1e1e;
+  }
+
+  .sidebar-resizer:hover,
+  .sidebar-resizer.active {
+    background-color: #9d9d9d;
   }
 </style>
