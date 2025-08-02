@@ -69,6 +69,7 @@
       onRightClick={onRightClick}
       showContextMenu={showContextMenu}
       handleCloseContextMenu={handleCloseContextMenu}
+      depth={0}
     />
   {/if}
 

@@ -8,6 +8,8 @@
   export let showContextMenu = false
   export let handleCloseContextMenu = () => {}
   export let onRightClick = () => {}
+
+  export let depth = 0
   let expanded = node.is_root
 
   const onClick = () => {
@@ -37,6 +39,7 @@
     role="button"
     tabindex="0"
     class="node-content"
+    style="padding-left: {depth + 1}rem"
     on:click={onClick}
     on:contextmenu={(e) => onRightClick(node, e)}
     on:keydown={(e) => {
@@ -70,6 +73,7 @@
           onRightClick={onRightClick}
           showContextMenu={showContextMenu}
           handleCloseContextMenu={handleCloseContextMenu}
+          depth={depth + 1}
         />
       {/each}
     </div>
@@ -77,16 +81,16 @@
 </div>
 
 <style>
-  .node {
-    margin-left: 1rem;
-  }
-
   .node-content {
+    padding: 0.35rem 0 0.25rem 0;
     font-size: 0.85rem;
     display: flex;
     column-gap: 0.25rem;
     min-height: 1rem;
-    margin-bottom: 0.3rem;
-    cursor: pointer;
+    cursor: default;
+  }
+
+  .node-content:hover {
+    background-color: #303030;
   }
 </style>
