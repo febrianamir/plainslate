@@ -11,6 +11,8 @@
 
   export let depth = 0
   let expanded = node.is_root
+  let nodeActive = false
+  $: nodeActive = $openedFile === node.path
 
   const onClick = () => {
     if (showContextMenu) {
@@ -39,6 +41,7 @@
     role="button"
     tabindex="0"
     class="node-content"
+    class:active={nodeActive}
     style="padding-left: {depth + 1}rem"
     on:click={onClick}
     on:contextmenu={(e) => onRightClick(node, e)}
@@ -82,6 +85,7 @@
 
 <style>
   .node-content {
+    position: relative;
     padding: 0.35rem 0 0.25rem 0;
     font-size: 0.85rem;
     display: flex;
@@ -92,5 +96,19 @@
 
   .node-content:hover {
     background-color: #303030;
+  }
+
+  .node-content.active {
+    color: #6da96f;
+  }
+
+  .node-content.active::before {
+    content: '';
+    position: absolute;
+    width: 2px;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background-color: #6da96f;
   }
 </style>
