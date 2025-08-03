@@ -1,5 +1,5 @@
 <script>
-  import { OpenFile, SaveFile } from '../../wailsjs/go/usecase/Usecase.js'
+  import { OpenOrCreateFile, SaveFile } from '../../wailsjs/go/usecase/Usecase.js'
   import { openedFile } from '../stores/global.js'
   import { onMount, onDestroy } from 'svelte'
   import { get } from 'svelte/store'
@@ -52,7 +52,7 @@
       if (path && path.trim() !== '') {
         // Open file
         try {
-          const result = await OpenFile(path)
+          const result = await OpenOrCreateFile(path)
           value = result
           originalValue = result
           isDirty = false

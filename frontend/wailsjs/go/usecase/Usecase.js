@@ -10,8 +10,8 @@ export function GetNodeTree() {
   return window['go']['usecase']['Usecase']['GetNodeTree']();
 }
 
-export function OpenFile(arg1) {
-  return window['go']['usecase']['Usecase']['OpenFile'](arg1);
+export function OpenOrCreateFile(arg1) {
+  return window['go']['usecase']['Usecase']['OpenOrCreateFile'](arg1);
 }
 
 export function SaveFile(arg1, arg2) {

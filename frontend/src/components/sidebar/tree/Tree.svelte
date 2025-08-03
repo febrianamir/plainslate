@@ -6,7 +6,14 @@
   import { onMount, onDestroy } from 'svelte'
 
   let unsubRootPath
+  let depth = 0
   let tree = null
+  let parentMap = new Map()
+  // forceTreeUpdate to force reactivity after changes to tree
+  const forceTreeUpdate = () => {
+    tree = structuredClone(tree)
+    parentMap = indexParents(tree)
+  }
 
   // Context menu properties
   let showContextMenu = false
@@ -20,7 +27,8 @@
       if (dir && dir.trim() !== '') {
         try {
           const result = await GetNodeTree()
-          tree = result
+          tree = addNodeField(result)
+          parentMap = indexParents(tree)
         } catch (err) {
           console.error('Error fetching node tree:', err)
           tree = null
@@ -57,19 +65,82 @@
     showContextMenu = false
   }
 
-  const handleCreateNewFile = () => {}
+  const handleOpenCreateFileInput = () => {
+    if (contextMenuTargetNode === null) {
+      return
+    }
+
+    let targetFullPath = contextMenuTargetNode.path
+    let parentNode = contextMenuTargetNode
+    if (contextMenuTargetNode.type === 'file') {
+      parentNode = parentMap.get(targetFullPath)
+    }
+
+    let dirPath = parentNode.path
+    let newNode = {
+      state: 'create',
+      name: '',
+      path: dirPath + '/' + 'new_file.md',
+      type: 'file',
+      children: [],
+    }
+
+    insertNode(parentNode, newNode)
+    contextMenuTargetNode.expanded = true
+    forceTreeUpdate()
+  }
 
   const handleCreateNewDirectory = () => {}
+
+  const insertNode = (targetNode, newNode) => {
+    if (!targetNode.children) {
+      targetNode.children = []
+    }
+    targetNode.children = [newNode, ...(targetNode.children || [])]
+  }
+
+  const removeNode = (targetNode) => {
+    const parent = parentMap.get(targetNode.path)
+    if (!parent || !parent.children) {
+      return
+    }
+    parent.children = parent.children.filter((n) => {
+      return n !== targetNode
+    })
+  }
+
+  const addNodeField = (node) => {
+    node.expanded = node.is_root || false
+    node.state = 'view'
+    if (node.children && Array.isArray(node.children)) {
+      for (const child of node.children) {
+        addNodeField(child)
+      }
+    }
+    return node
+  }
+
+  const indexParents = (node, parent = null, map = new Map()) => {
+    map.set(node.path, parent)
+    if (node.children) {
+      for (const child of node.children) {
+        indexParents(child, node, map)
+      }
+    }
+    return map
+  }
 </script>
 
 <div class="directory-tree">
   {#if tree}
     <TreeNode
+      removeNode={removeNode}
+      forceTreeUpdate={forceTreeUpdate}
       node={tree}
       onRightClick={onRightClick}
       showContextMenu={showContextMenu}
       handleCloseContextMenu={handleCloseContextMenu}
-      depth={0}
+      depth={depth}
     />
   {/if}
 
@@ -79,11 +150,11 @@
         role="button"
         tabindex="0"
         class="tree-context-item"
-        on:click={handleCreateNewFile}
+        on:click={handleOpenCreateFileInput}
         on:keydown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault()
-            handleCreateNewFile()
+            handleOpenCreateFileInput()
           }
         }}
       >
@@ -108,6 +179,12 @@
 </div>
 
 <style>
+  .directory-tree {
+    width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
   .tree-context-menu {
     position: fixed;
     z-index: 1000;

@@ -36,6 +36,8 @@
 
 <style>
   .sidebar {
+    box-sizing: border-box;
+    overflow: hidden;
     display: flex;
     height: 100%;
     background-color: #1e1e1e;
@@ -43,6 +45,10 @@
   }
 
   .sidebar-content {
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
     padding-top: 1rem;
   }
 

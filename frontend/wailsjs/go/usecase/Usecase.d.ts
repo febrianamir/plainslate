@@ -7,7 +7,7 @@ export function GetConfig():Promise<lib.Config>;
 
 export function GetNodeTree():Promise<model.Node>;
 
-export function OpenFile(arg1:string):Promise<string>;
+export function OpenOrCreateFile(arg1:string):Promise<string>;
 
 export function SaveFile(arg1:string,arg2:string):Promise<void>;
 

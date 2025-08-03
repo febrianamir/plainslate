@@ -18,8 +18,8 @@ func (u *Usecase) buildFilePath(filename string) string {
 	return filepath.Join(u.Config.RootPath, filename)
 }
 
-// openFile open/create file it if it doesn't exist.
-func (u *Usecase) openFile(filepath string) (*os.File, error) {
+// openOrCreateFile open/create file if it doesn't exist.
+func (u *Usecase) openOrCreateFile(filepath string) (*os.File, error) {
 	err := u.checkBaseDirectory()
 	if err != nil {
 		return nil, err
@@ -45,8 +45,8 @@ func (u *Usecase) saveFile(filepath string, content string) error {
 	return os.WriteFile(filepath, []byte(content), 0644)
 }
 
-func (u *Usecase) OpenFile(filepath string) (string, error) {
-	file, err := u.openFile(filepath)
+func (u *Usecase) OpenOrCreateFile(filepath string) (string, error) {
+	file, err := u.openOrCreateFile(filepath)
 	if err != nil {
 		return "", err
 	}
