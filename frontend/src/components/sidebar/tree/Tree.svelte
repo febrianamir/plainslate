@@ -90,7 +90,30 @@
     forceTreeUpdate()
   }
 
-  const handleCreateNewDirectory = () => {}
+  const handleOpenCreateDirectoryInput = () => {
+    if (contextMenuTargetNode === null) {
+      return
+    }
+
+    let targetFullPath = contextMenuTargetNode.path
+    let parentNode = contextMenuTargetNode
+    if (contextMenuTargetNode.type === 'file') {
+      parentNode = parentMap.get(targetFullPath)
+    }
+
+    let dirPath = parentNode.path
+    let newNode = {
+      state: 'create',
+      name: '',
+      path: dirPath + '/' + 'new_directory',
+      type: 'directory',
+      children: [],
+    }
+
+    insertNode(parentNode, newNode)
+    contextMenuTargetNode.expanded = true
+    forceTreeUpdate()
+  }
 
   const insertNode = (targetNode, newNode) => {
     if (!targetNode.children) {
@@ -164,11 +187,11 @@
         role="button"
         tabindex="0"
         class="tree-context-item"
-        on:click={handleCreateNewDirectory}
+        on:click={handleOpenCreateDirectoryInput}
         on:keydown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault()
-            handleCreateNewDirectory()
+            handleOpenCreateDirectoryInput()
           }
         }}
       >

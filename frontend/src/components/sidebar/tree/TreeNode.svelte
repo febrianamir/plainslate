@@ -3,6 +3,7 @@
   import TreeNode from './TreeNode.svelte'
   import { openedFile } from '../../../stores/global.js'
   import { onMount, onDestroy, tick } from 'svelte'
+  import { CreateDirectory } from '../../../../wailsjs/go/usecase/Usecase.js'
 
   export let node
   export let showContextMenu = false
@@ -53,6 +54,19 @@
     node.state = 'view'
     handleOpenFile()
     forceTreeUpdate()
+  }
+
+  const handleCreateDirectory = async () => {
+    try {
+      let dirPath = node.path.substring(0, node.path.lastIndexOf('/')) + '/' + node.name
+      console.log(dirPath)
+      await CreateDirectory(dirPath)
+      node.path = dirPath
+      node.state = 'view'
+      forceTreeUpdate()
+    } catch (err) {
+      console.error('Error creating directory:', err)
+    }
   }
 
   const onClickOutside = (e) => {
@@ -120,7 +134,12 @@
           on:keydown={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault()
-              handleCreateFile()
+              if (node.type === 'file') {
+                return handleCreateFile()
+              }
+              if (node.type === 'directory') {
+                return handleCreateDirectory()
+              }
             }
           }}
         />

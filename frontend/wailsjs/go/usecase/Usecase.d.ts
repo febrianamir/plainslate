@@ -3,6 +3,8 @@
 import {lib} from '../models';
 import {model} from '../models';
 
+export function CreateDirectory(arg1:string):Promise<void>;
+
 export function GetConfig():Promise<lib.Config>;
 
 export function GetNodeTree():Promise<model.Node>;
