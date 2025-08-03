@@ -204,7 +204,8 @@
 <style>
   .directory-tree {
     width: 100%;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: scroll;
     box-sizing: border-box;
   }
 

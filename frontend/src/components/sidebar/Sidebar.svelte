@@ -45,6 +45,8 @@
   }
 
   .sidebar-content {
+    display: flex;
+    flex-direction: column;
     max-width: 100%;
     width: 100%;
     box-sizing: border-box;
