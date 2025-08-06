@@ -78,6 +78,7 @@
 
     let dirPath = parentNode.path
     let newNode = {
+      parent: parentNode,
       state: 'create',
       name: '',
       path: dirPath + '/' + 'new_file.md',
@@ -103,6 +104,7 @@
 
     let dirPath = parentNode.path
     let newNode = {
+      parent: parentNode,
       state: 'create',
       name: '',
       path: dirPath + '/' + 'new_directory',
@@ -135,12 +137,25 @@
   const addNodeField = (node) => {
     node.expanded = node.is_root || false
     node.state = 'view'
+
     if (node.children && Array.isArray(node.children)) {
+      sortNodeChildren(node)
       for (const child of node.children) {
         addNodeField(child)
       }
     }
+
     return node
+  }
+
+  const sortNodeChildren = (node) => {
+    // Sort: directories first, then files, each alphabetically by name
+    node.children.sort((a, b) => {
+      if (a.type !== b.type) {
+        return a.type === 'directory' ? -1 : 1
+      }
+      return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
+    })
   }
 
   const indexParents = (node, parent = null, map = new Map()) => {
@@ -157,6 +172,7 @@
 <div class="directory-tree">
   {#if tree}
     <TreeNode
+      sortNodeChildren={sortNodeChildren}
       removeNode={removeNode}
       forceTreeUpdate={forceTreeUpdate}
       node={tree}

@@ -10,6 +10,7 @@
   export let handleCloseContextMenu = () => {}
   export let onRightClick = () => {}
   export let removeNode = () => {}
+  export let sortNodeChildren = () => {}
   export let forceTreeUpdate = () => {}
 
   export let depth = 0
@@ -52,17 +53,25 @@
     let dirPath = node.path.substring(0, node.path.lastIndexOf('/'))
     node.path = dirPath + '/' + node.name
     node.state = 'view'
+
     handleOpenFile()
+    if (node.parent) {
+      sortNodeChildren(node.parent)
+      delete node.parent
+    }
     forceTreeUpdate()
   }
 
   const handleCreateDirectory = async () => {
     try {
       let dirPath = node.path.substring(0, node.path.lastIndexOf('/')) + '/' + node.name
-      console.log(dirPath)
       await CreateDirectory(dirPath)
       node.path = dirPath
       node.state = 'view'
+      if (node.parent) {
+        sortNodeChildren(node.parent)
+        delete node.parent
+      }
       forceTreeUpdate()
     } catch (err) {
       console.error('Error creating directory:', err)
@@ -100,8 +109,14 @@
     on:click={onClick}
     on:contextmenu={(e) => onRightClick(node, e)}
     on:keydown={(e) => {
-      // Prevent open file when editing input node
-      if (document.activeElement.tagName === 'INPUT' || document.activeElement.isContentEditable) {
+      const target = e.target
+
+      // Prevent file open when editing an input or any editable content
+      let isEditingContent =
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target.isContentEditable
+      if (isEditingContent) {
         return
       }
 
@@ -151,6 +166,7 @@
     <div>
       {#each node.children as child}
         <TreeNode
+          sortNodeChildren={sortNodeChildren}
           removeNode={removeNode}
           forceTreeUpdate={forceTreeUpdate}
           node={child}
