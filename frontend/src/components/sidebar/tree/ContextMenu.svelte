@@ -4,13 +4,14 @@
 
   export let handleOpenCreateFileInput = () => {}
   export let handleOpenCreateDirectoryInput = () => {}
+  export let handleOpenRenameInput = () => {}
 </script>
 
-<div class="tree-context-menu" style="top:{contextMenuY}px; left:{contextMenuX}px;">
+<div class="context-menu" style="top:{contextMenuY}px; left:{contextMenuX}px;">
   <div
     role="button"
     tabindex="0"
-    class="tree-context-item"
+    class="context-item"
     on:click={handleOpenCreateFileInput}
     on:keydown={(e) => {
       if (e.key === 'Enter' || e.key === ' ') {
@@ -24,7 +25,7 @@
   <div
     role="button"
     tabindex="0"
-    class="tree-context-item"
+    class="context-item"
     on:click={handleOpenCreateDirectoryInput}
     on:keydown={(e) => {
       if (e.key === 'Enter' || e.key === ' ') {
@@ -35,12 +36,27 @@
   >
     New Directory
   </div>
+  <div class="context-separator"></div>
+  <div
+    role="button"
+    tabindex="0"
+    class="context-item"
+    on:click={handleOpenRenameInput}
+    on:keydown={(e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault()
+        handleOpenRenameInput()
+      }
+    }}
+  >
+    Rename
+  </div>
 </div>
 
 <style>
-  .tree-context-menu {
+  .context-menu {
     position: fixed;
-    z-index: 1000;
+    z-index: 10000;
     background: #282828;
     border: 1px solid #323232;
     border-radius: 2px;
@@ -48,13 +64,18 @@
     padding: 0.2rem 0;
   }
 
-  .tree-context-item {
+  .context-item {
     padding: 0.35rem 1.2rem;
     cursor: pointer;
   }
 
-  .tree-context-item:hover {
+  .context-item:hover {
     color: #282828;
     background-color: #c9e6c1;
+  }
+
+  .context-separator {
+    height: 1px;
+    background-color: #1e1e1e;
   }
 </style>

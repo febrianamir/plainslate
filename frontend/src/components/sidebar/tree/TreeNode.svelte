@@ -3,7 +3,7 @@
   import TreeNode from './TreeNode.svelte'
   import { openedFile } from '../../../stores/global.js'
   import { onMount, onDestroy, tick } from 'svelte'
-  import { CreateDirectory } from '../../../../wailsjs/go/usecase/Usecase.js'
+  import { CreateDirectory, RenamePath } from '../../../../wailsjs/go/usecase/Usecase.js'
 
   export let node
   export let showContextMenu = false
@@ -19,7 +19,7 @@
   $: nodeActive = $openedFile === node.path
 
   let inputRef
-  $: if (node.state === 'create') {
+  $: if (node.state !== 'view') {
     tick().then(() => {
       inputRef?.focus()
     })
@@ -78,12 +78,43 @@
     }
   }
 
-  const onClickOutside = (e) => {
-    if (node.state !== 'create') {
+  const handleRename = async () => {
+    if (!node.oldPath || node.oldPath === '') {
       return
     }
+
+    try {
+      let newPath = node.path.substring(0, node.path.lastIndexOf('/')) + '/' + node.name
+      await RenamePath(node.oldPath, newPath)
+      node.path = newPath
+      node.state = 'view'
+      if (node.parent) {
+        sortNodeChildren(node.parent)
+        delete node.parent
+        delete node.oldPath
+      }
+      forceTreeUpdate()
+    } catch (err) {
+      console.error('Error renaming path:', err)
+    }
+  }
+
+  const onClickOutside = (e) => {
+    if (node.state === 'view') {
+      return
+    }
+
     if (!nodeEl.contains(e.target)) {
-      removeNode(node)
+      switch (node.state) {
+        case 'create':
+          removeNode(node)
+          break
+        case 'rename':
+          node.state = 'view'
+          node.path = node.oldPath
+          delete node.oldPath
+          delete node.parent
+      }
       forceTreeUpdate()
     }
   }
@@ -149,11 +180,17 @@
           on:keydown={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault()
-              if (node.type === 'file') {
+
+              if (node.state === 'create' && node.type === 'file') {
                 return handleCreateFile()
               }
-              if (node.type === 'directory') {
+
+              if (node.state === 'create' && node.type === 'directory') {
                 return handleCreateDirectory()
+              }
+
+              if (node.state === 'rename') {
+                return handleRename()
               }
             }
           }}

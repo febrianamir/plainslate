@@ -118,6 +118,23 @@
     forceTreeUpdate()
   }
 
+  const handleOpenRenameInput = () => {
+    if (contextMenuTargetNode === null) {
+      return
+    }
+
+    let targetFullPath = contextMenuTargetNode.path
+    let parentNode = parentMap.get(targetFullPath)
+
+    let dirPath = parentNode.path
+    // Change view node to rename node
+    contextMenuTargetNode.parent = parentNode
+    contextMenuTargetNode.state = 'rename'
+    contextMenuTargetNode.oldPath = contextMenuTargetNode.path
+
+    forceTreeUpdate()
+  }
+
   const insertNode = (targetNode, newNode) => {
     if (!targetNode.children) {
       targetNode.children = []
@@ -190,6 +207,7 @@
       contextMenuY={contextMenuY}
       handleOpenCreateFileInput={handleOpenCreateFileInput}
       handleOpenCreateDirectoryInput={handleOpenCreateDirectoryInput}
+      handleOpenRenameInput={handleOpenRenameInput}
     />
   {/if}
 </div>
@@ -200,5 +218,18 @@
     overflow-x: hidden;
     overflow-y: scroll;
     box-sizing: border-box;
+  }
+
+  .directory-tree::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .directory-tree::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .directory-tree::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
   }
 </style>
