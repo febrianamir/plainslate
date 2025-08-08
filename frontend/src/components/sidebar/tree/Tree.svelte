@@ -5,7 +5,6 @@
   import { GetNodeTree, MoveToTrash } from '../../../../wailsjs/go/usecase/Usecase.js'
   import { rootPath } from '../../../stores/global.js'
   import { onMount, onDestroy } from 'svelte'
-  import { Move } from 'lucide-svelte'
 
   let unsubRootPath
   let depth = 0
@@ -234,7 +233,6 @@
     width: 100%;
     overflow-x: hidden;
     overflow-y: scroll;
-    box-sizing: border-box;
   }
 
   .directory-tree::-webkit-scrollbar {
