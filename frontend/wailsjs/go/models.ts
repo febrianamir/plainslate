@@ -1,6 +1,7 @@
 export namespace lib {
 	
 	export class Config {
+	    UserHomeDir: string;
 	    root_path: string;
 	
 	    static createFrom(source: any = {}) {
@@ -9,6 +10,7 @@ export namespace lib {
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.UserHomeDir = source["UserHomeDir"];
 	        this.root_path = source["root_path"];
 	    }
 	}

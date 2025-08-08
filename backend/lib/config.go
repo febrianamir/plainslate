@@ -1,12 +1,17 @@
 package lib
 
 import (
+	"context"
 	"encoding/json"
 	"os"
 	"path/filepath"
+
+	"go.uber.org/zap"
 )
 
 type Config struct {
+	UserHomeDir string
+
 	RootPath string `json:"root_path"`
 }
 
@@ -31,6 +36,19 @@ func NewConfig() (*Config, error) {
 		return nil, err
 	}
 
+	// Set internal configs
+	userHomeDir, err := os.UserHomeDir()
+	if err != nil {
+		LogError(context.Background(), err.Error(),
+			zap.Strings("tags", []string{"config", "UserHomeDir"}),
+		)
+		return nil, err
+	}
+	cfg.UserHomeDir = userHomeDir
+
+	LogInfo(context.Background(), "done set app config",
+		zap.Any("config", cfg),
+	)
 	return &cfg, nil
 }
 

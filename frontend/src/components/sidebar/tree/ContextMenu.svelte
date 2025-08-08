@@ -5,6 +5,7 @@
   export let handleOpenCreateFileInput = () => {}
   export let handleOpenCreateDirectoryInput = () => {}
   export let handleOpenRenameInput = () => {}
+  export let handleMoveToTrash = () => {}
 </script>
 
 <div class="context-menu" style="top:{contextMenuY}px; left:{contextMenuX}px;">
@@ -50,6 +51,20 @@
     }}
   >
     Rename
+  </div>
+  <div
+    role="button"
+    tabindex="0"
+    class="context-item"
+    on:click={handleMoveToTrash}
+    on:keydown={(e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault()
+        handleMoveToTrash()
+      }
+    }}
+  >
+    Move To Trash
   </div>
 </div>
 

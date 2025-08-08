@@ -14,6 +14,10 @@ export function GetNodeTree() {
   return window['go']['usecase']['Usecase']['GetNodeTree']();
 }
 
+export function MoveToTrash(arg1) {
+  return window['go']['usecase']['Usecase']['MoveToTrash'](arg1);
+}
+
 export function OpenOrCreateFile(arg1) {
   return window['go']['usecase']['Usecase']['OpenOrCreateFile'](arg1);
 }

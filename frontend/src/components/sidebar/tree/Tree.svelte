@@ -2,9 +2,10 @@
   import TreeNode from './TreeNode.svelte'
   import ContextMenu from './ContextMenu.svelte'
 
-  import { GetNodeTree } from '../../../../wailsjs/go/usecase/Usecase.js'
+  import { GetNodeTree, MoveToTrash } from '../../../../wailsjs/go/usecase/Usecase.js'
   import { rootPath } from '../../../stores/global.js'
   import { onMount, onDestroy } from 'svelte'
+  import { Move } from 'lucide-svelte'
 
   let unsubRootPath
   let depth = 0
@@ -135,6 +136,21 @@
     forceTreeUpdate()
   }
 
+  const handleMoveToTrash = async () => {
+    if (contextMenuTargetNode === null) {
+      return
+    }
+
+    let moveToTrashNode = contextMenuTargetNode
+    try {
+      await MoveToTrash(moveToTrashNode.path)
+      removeNode(moveToTrashNode)
+      forceTreeUpdate()
+    } catch (err) {
+      console.error('Error move to trash:', err)
+    }
+  }
+
   const insertNode = (targetNode, newNode) => {
     if (!targetNode.children) {
       targetNode.children = []
@@ -208,6 +224,7 @@
       handleOpenCreateFileInput={handleOpenCreateFileInput}
       handleOpenCreateDirectoryInput={handleOpenCreateDirectoryInput}
       handleOpenRenameInput={handleOpenRenameInput}
+      handleMoveToTrash={handleMoveToTrash}
     />
   {/if}
 </div>
