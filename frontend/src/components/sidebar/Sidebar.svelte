@@ -55,7 +55,6 @@
   }
 
   .sidebar-appname {
-    margin: 0;
     padding: 0 1rem 1rem 1rem;
   }
 
