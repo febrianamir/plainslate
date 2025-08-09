@@ -11,19 +11,19 @@
   let tree = null
   let parentMap = new Map()
   // forceTreeUpdate to force reactivity after changes to tree
-  const forceTreeUpdate = () => {
+  function forceTreeUpdate() {
     tree = structuredClone(tree)
     parentMap = indexParents(tree)
   }
 
   // Context menu properties
-  let showContextMenu = false
+  let isShowContextMenu = false
   let contextMenuX = 0
   let contextMenuY = 0
   let contextMenuTargetNode = null
 
   onMount(() => {
-    window.addEventListener('click', handleCloseContextMenu)
+    window.addEventListener('click', closeContextMenu)
     unsubRootPath = rootPath.subscribe(async (dir) => {
       if (dir && dir.trim() !== '') {
         try {
@@ -39,34 +39,34 @@
   })
 
   onDestroy(() => {
-    window.removeEventListener('click', handleCloseContextMenu)
+    window.removeEventListener('click', closeContextMenu)
     unsubRootPath?.()
   })
 
-  const onRightClick = (node, e) => {
+  function onRightClick(node, e) {
     e.preventDefault()
 
-    if (!showContextMenu) {
-      return handleOpenContextMenu(node, e)
+    if (!isShowContextMenu) {
+      return openContextMenu(node, e)
     }
-    handleCloseContextMenu(node, e)
+    closeContextMenu(node, e)
   }
 
-  const handleOpenContextMenu = (node, e) => {
+  function openContextMenu(node, e) {
     contextMenuTargetNode = node
     contextMenuX = e.clientX
     contextMenuY = e.clientY
-    showContextMenu = true
+    isShowContextMenu = true
   }
 
-  const handleCloseContextMenu = () => {
+  function closeContextMenu() {
     contextMenuTargetNode = null
     contextMenuX = 0
     contextMenuY = 0
-    showContextMenu = false
+    isShowContextMenu = false
   }
 
-  const handleOpenCreateFileInput = () => {
+  function showCreateFileInput() {
     if (contextMenuTargetNode === null) {
       return
     }
@@ -92,7 +92,7 @@
     forceTreeUpdate()
   }
 
-  const handleOpenCreateDirectoryInput = () => {
+  function showCreateFolderInput() {
     if (contextMenuTargetNode === null) {
       return
     }
@@ -118,7 +118,7 @@
     forceTreeUpdate()
   }
 
-  const handleOpenRenameInput = () => {
+  function showRenameInput() {
     if (contextMenuTargetNode === null) {
       return
     }
@@ -135,7 +135,7 @@
     forceTreeUpdate()
   }
 
-  const handleMoveToTrash = async () => {
+  async function moveItemToTrash() {
     if (contextMenuTargetNode === null) {
       return
     }
@@ -150,14 +150,14 @@
     }
   }
 
-  const insertNode = (targetNode, newNode) => {
+  function insertNode(targetNode, newNode) {
     if (!targetNode.children) {
       targetNode.children = []
     }
     targetNode.children = [newNode, ...(targetNode.children || [])]
   }
 
-  const removeNode = (targetNode) => {
+  function removeNode(targetNode) {
     const parent = parentMap.get(targetNode.path)
     if (!parent || !parent.children) {
       return
@@ -167,7 +167,7 @@
     })
   }
 
-  const addNodeField = (node) => {
+  function addNodeField(node) {
     node.expanded = node.is_root || false
     node.state = 'view'
 
@@ -181,7 +181,7 @@
     return node
   }
 
-  const sortNodeChildren = (node) => {
+  function sortNodeChildren(node) {
     // Sort: directories first, then files, each alphabetically by name
     node.children.sort((a, b) => {
       if (a.type !== b.type) {
@@ -191,7 +191,7 @@
     })
   }
 
-  const indexParents = (node, parent = null, map = new Map()) => {
+  function indexParents(node, parent = null, map = new Map()) {
     map.set(node.path, parent)
     if (node.children) {
       for (const child of node.children) {
@@ -210,20 +210,20 @@
       forceTreeUpdate={forceTreeUpdate}
       node={tree}
       onRightClick={onRightClick}
-      showContextMenu={showContextMenu}
-      handleCloseContextMenu={handleCloseContextMenu}
+      isShowContextMenu={isShowContextMenu}
+      closeContextMenu={closeContextMenu}
       depth={depth}
     />
   {/if}
 
-  {#if showContextMenu}
+  {#if isShowContextMenu}
     <ContextMenu
       contextMenuX={contextMenuX}
       contextMenuY={contextMenuY}
-      handleOpenCreateFileInput={handleOpenCreateFileInput}
-      handleOpenCreateDirectoryInput={handleOpenCreateDirectoryInput}
-      handleOpenRenameInput={handleOpenRenameInput}
-      handleMoveToTrash={handleMoveToTrash}
+      showCreateFileInput={showCreateFileInput}
+      showCreateFolderInput={showCreateFolderInput}
+      showRenameInput={showRenameInput}
+      moveItemToTrash={moveItemToTrash}
     />
   {/if}
 </div>

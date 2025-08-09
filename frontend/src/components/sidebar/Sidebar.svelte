@@ -3,28 +3,29 @@
   import SetRootPath from '../SetRootPath.svelte'
   import { FileText, Search } from 'lucide-svelte'
   import { onDestroy, onMount } from 'svelte'
+  import { handleEnter } from '../../../src/lib/utils.js'
 
-  let width = 250
-  let isResizing = false
+  let sidebarWidth = 250
+  let isSidebarResizing = false
   let activeTab = 'explorer'
 
-  const startResize = (e) => {
-    isResizing = true
+  function startResize(e) {
     e.preventDefault()
+    isSidebarResizing = true
   }
 
-  const onMouseMove = (e) => {
-    if (isResizing) {
-      width = Math.max(200, e.clientX) // Minimum width = 200px
+  function onMouseMove(e) {
+    if (isSidebarResizing) {
+      sidebarWidth = Math.max(200, e.clientX) // Minimum width = 200px
     }
   }
 
-  const handleActiveTab = (tabName) => {
+  function handleActiveTab(tabName) {
     activeTab = tabName
   }
 
-  const stopResize = () => {
-    isResizing = false
+  function stopResize() {
+    isSidebarResizing = false
   }
 
   onMount(() => {
@@ -39,7 +40,7 @@
 </script>
 
 <div class="sidebar">
-  <div class="sidebar-content" style="width: {width}px">
+  <div class="sidebar-content" style="width: {sidebarWidth}px">
     <p class="sidebar-appname">PlainSlate</p>
     <SetRootPath />
     <div class="sidebar-activity">
@@ -51,10 +52,7 @@
             handleActiveTab('explorer')
           }}
           on:keydown={(e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault()
-              handleActiveTab('explorer')
-            }
+            handleEnter(e, () => handleActiveTab('explorer'))
           }}
         >
           <FileText size={24} />
@@ -66,10 +64,7 @@
             handleActiveTab('search')
           }}
           on:keydown={(e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault()
-              handleActiveTab('search')
-            }
+            handleEnter(e, () => handleActiveTab('search'))
           }}
         >
           <Search size={24} strokeWidth={2.5} />
@@ -83,7 +78,7 @@
       </div>
     </div>
   </div>
-  <div class="sidebar-resizer" class:active={isResizing} on:mousedown={startResize}></div>
+  <div class="sidebar-resizer" class:active={isSidebarResizing} on:mousedown={startResize}></div>
 </div>
 
 <style>

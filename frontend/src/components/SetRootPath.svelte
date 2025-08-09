@@ -2,12 +2,13 @@
   import { SetRootPath } from '../../wailsjs/go/usecase/Usecase.js'
   import { rootPath } from '../stores/global.js'
   import { onMount } from 'svelte'
+  import { handleEnter } from '../../src/lib/utils.js'
 
   let path = ''
   let errorMessage = ''
   let successMessage = ''
 
-  const handleSavePath = async () => {
+  async function setRootPath() {
     errorMessage = ''
     successMessage = ''
     try {
@@ -19,10 +20,8 @@
     }
   }
 
-  const onKeyDown = async (e) => {
-    if (e.key === 'Enter') {
-      await handleSavePath()
-    }
+  async function onKeyDown(e) {
+    await handleEnter(e, setRootPath)
   }
 
   onMount(() => {

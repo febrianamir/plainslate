@@ -4,10 +4,11 @@
   import { openedFile } from '../../../stores/global.js'
   import { onMount, onDestroy, tick } from 'svelte'
   import { CreateDirectory, RenamePath } from '../../../../wailsjs/go/usecase/Usecase.js'
+  import { handleEnter } from '../../../../src/lib/utils.js'
 
   export let node
-  export let showContextMenu = false
-  export let handleCloseContextMenu = () => {}
+  export let isShowContextMenu = false
+  export let closeContextMenu = () => {}
   export let onRightClick = () => {}
   export let removeNode = () => {}
   export let sortNodeChildren = () => {}
@@ -27,34 +28,34 @@
 
   let nodeEl
 
-  const onClick = () => {
-    if (showContextMenu) {
-      return handleCloseContextMenu()
+  function onClick() {
+    if (isShowContextMenu) {
+      return closeContextMenu()
     }
 
     if (node.type === 'directory') {
-      handleToggleExpand()
+      toggleExpandFolder()
     }
     if (node.type === 'file' && node.state === 'view') {
-      handleOpenFile()
+      openFile()
     }
   }
 
-  const handleToggleExpand = () => {
+  function toggleExpandFolder() {
     node.expanded = !node.expanded
     forceTreeUpdate()
   }
 
-  const handleOpenFile = () => {
+  function openFile() {
     openedFile.set(node.path)
   }
 
-  const handleCreateFile = () => {
+  function createFile() {
     let dirPath = node.path.substring(0, node.path.lastIndexOf('/'))
     node.path = dirPath + '/' + node.name
     node.state = 'view'
 
-    handleOpenFile()
+    openFile()
     if (node.parent) {
       sortNodeChildren(node.parent)
       delete node.parent
@@ -62,7 +63,7 @@
     forceTreeUpdate()
   }
 
-  const handleCreateDirectory = async () => {
+  async function createFolder() {
     try {
       let dirPath = node.path.substring(0, node.path.lastIndexOf('/')) + '/' + node.name
       await CreateDirectory(dirPath)
@@ -78,7 +79,7 @@
     }
   }
 
-  const handleRename = async () => {
+  async function rename() {
     if (!node.oldPath || node.oldPath === '') {
       return
     }
@@ -99,7 +100,7 @@
     }
   }
 
-  const onClickOutside = (e) => {
+  function onClickOutside(e) {
     if (node.state === 'view') {
       return
     }
@@ -151,10 +152,7 @@
         return
       }
 
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault()
-        handleOpenFile()
-      }
+      handleEnter(e, openFile)
     }}
   >
     <div class="node-icon">
@@ -178,21 +176,19 @@
           bind:this={inputRef}
           bind:value={node.name}
           on:keydown={(e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault()
-
+            handleEnter(e, () => {
               if (node.state === 'create' && node.type === 'file') {
-                return handleCreateFile()
+                return createFile()
               }
 
               if (node.state === 'create' && node.type === 'directory') {
-                return handleCreateDirectory()
+                return createFolder()
               }
 
               if (node.state === 'rename') {
-                return handleRename()
+                return rename()
               }
-            }
+            })
           }}
         />
       {/if}
@@ -208,8 +204,8 @@
           forceTreeUpdate={forceTreeUpdate}
           node={child}
           onRightClick={onRightClick}
-          showContextMenu={showContextMenu}
-          handleCloseContextMenu={handleCloseContextMenu}
+          isShowContextMenu={isShowContextMenu}
+          closeContextMenu={closeContextMenu}
           depth={depth + 1}
         />
       {/each}

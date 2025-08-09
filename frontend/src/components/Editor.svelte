@@ -5,9 +5,9 @@
   import { get } from 'svelte/store'
 
   export let filename = 'Untitled'
-  export let value = ''
-  export let originalValue = ''
-  export let isDirty = false
+  export let fileContent = ''
+  export let savedFileContent = ''
+  export let hasUnsavedChanges = false
   export let placeholder = 'Write your markdown here...'
   export let rows = 35
   export let cols = 100
@@ -16,34 +16,34 @@
   let errorMessage = ''
   let successMessage = ''
 
-  const handleInput = (e) => {
-    value = e.target.value
-    isDirty = value !== originalValue
-    dispatchEvent(new CustomEvent('input', { detail: value }))
+  function handleInput(e) {
+    fileContent = e.target.value
+    hasUnsavedChanges = fileContent !== savedFileContent
+    dispatchEvent(new CustomEvent('input', { detail: fileContent }))
   }
 
-  const handleSave = async () => {
+  async function saveFile() {
     // Only save changed files
-    if (isDirty) {
+    if (hasUnsavedChanges) {
       errorMessage = ''
       successMessage = ''
       try {
         let saveFilePath = get(openedFile)
-        await SaveFile(saveFilePath, value)
+        await SaveFile(saveFilePath, fileContent)
         successMessage = 'File saved!'
-        originalValue = value
-        isDirty = false
+        savedFileContent = fileContent
+        hasUnsavedChanges = false
       } catch (err) {
         errorMessage = err.message || 'Failed to save file.'
       }
     }
   }
 
-  const onKeyDown = async (e) => {
+  async function onKeyDown(e) {
     if ((e.ctrlKey || e.metaKey) && e.key === 's') {
       // Ctrl+S or Command+S for MacOS
       e.preventDefault()
-      await handleSave()
+      await saveFile()
     }
   }
 
@@ -53,12 +53,12 @@
         // Open file
         try {
           const result = await OpenOrCreateFile(path)
-          value = result
-          originalValue = result
-          isDirty = false
+          fileContent = result
+          savedFileContent = result
+          hasUnsavedChanges = false
         } catch (err) {
           console.error('Error fetching file:', err)
-          value = ''
+          fileContent = ''
         }
 
         // Set tab filename
@@ -80,12 +80,12 @@
       <div class="editor-tab-text">
         {filename}
       </div>
-      <div class="editor-tab-indicator" class:active={isDirty}></div>
+      <div class="editor-tab-indicator" class:active={hasUnsavedChanges}></div>
     </div>
   </div>
   <textarea
     class="editor-textarea"
-    bind:value={value}
+    bind:value={fileContent}
     rows={rows}
     cols={cols}
     placeholder={placeholder}

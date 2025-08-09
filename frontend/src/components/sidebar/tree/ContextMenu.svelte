@@ -1,11 +1,13 @@
 <script>
+  import { handleEnter } from '../../../../src/lib/utils.js'
+
   export let contextMenuX = 0
   export let contextMenuY = 0
 
-  export let handleOpenCreateFileInput = () => {}
-  export let handleOpenCreateDirectoryInput = () => {}
-  export let handleOpenRenameInput = () => {}
-  export let handleMoveToTrash = () => {}
+  export let showCreateFileInput = () => {}
+  export let showCreateFolderInput = () => {}
+  export let showRenameInput = () => {}
+  export let moveItemToTrash = () => {}
 </script>
 
 <div class="context-menu" style="top:{contextMenuY}px; left:{contextMenuX}px;">
@@ -13,12 +15,9 @@
     role="button"
     tabindex="0"
     class="context-item"
-    on:click={handleOpenCreateFileInput}
+    on:click={showCreateFileInput}
     on:keydown={(e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault()
-        handleOpenCreateFileInput()
-      }
+      handleEnter(e, showCreateFileInput)
     }}
   >
     New File
@@ -27,12 +26,9 @@
     role="button"
     tabindex="0"
     class="context-item"
-    on:click={handleOpenCreateDirectoryInput}
+    on:click={showCreateFolderInput}
     on:keydown={(e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault()
-        handleOpenCreateDirectoryInput()
-      }
+      handleEnter(e, showCreateFolderInput)
     }}
   >
     New Directory
@@ -42,12 +38,9 @@
     role="button"
     tabindex="0"
     class="context-item"
-    on:click={handleOpenRenameInput}
+    on:click={showRenameInput}
     on:keydown={(e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault()
-        handleOpenRenameInput()
-      }
+      handleEnter(e, showRenameInput)
     }}
   >
     Rename
@@ -56,12 +49,9 @@
     role="button"
     tabindex="0"
     class="context-item"
-    on:click={handleMoveToTrash}
+    on:click={moveItemToTrash}
     on:keydown={(e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault()
-        handleMoveToTrash()
-      }
+      handleEnter(e, moveItemToTrash)
     }}
   >
     Move To Trash
