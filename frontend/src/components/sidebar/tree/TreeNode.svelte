@@ -86,7 +86,10 @@
 
     try {
       let newPath = node.path.substring(0, node.path.lastIndexOf('/')) + '/' + node.name
-      await RenamePath(node.oldPath, newPath)
+
+      if (node.oldPath !== newPath) {
+        await RenamePath(node.oldPath, newPath)
+      }
       node.path = newPath
       node.state = 'view'
       if (node.parent) {
@@ -176,7 +179,9 @@
           bind:this={inputRef}
           bind:value={node.name}
           on:keydown={(e) => {
+            console.log('onkeydown')
             handleEnter(e, () => {
+              console.log('enter')
               if (node.state === 'create' && node.type === 'file') {
                 return createFile()
               }
