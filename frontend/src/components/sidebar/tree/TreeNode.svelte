@@ -33,7 +33,7 @@
       return closeContextMenu()
     }
 
-    if (node.type === 'directory') {
+    if (node.type === 'directory' && node.state === 'view') {
       toggleExpandFolder()
     }
     if (node.type === 'file' && node.state === 'view') {
