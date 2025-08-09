@@ -17,6 +17,8 @@ export function RenamePath(arg1:string,arg2:string):Promise<void>;
 
 export function SaveFile(arg1:string,arg2:string):Promise<void>;
 
+export function SearchInFiles(arg1:string):Promise<Array<model.Match>>;
+
 export function SetRootPath(arg1:string):Promise<void>;
 
 export function WriteLog(arg1:string,arg2:Record<string, any>):Promise<void>;

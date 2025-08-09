@@ -19,6 +19,20 @@ export namespace lib {
 
 export namespace model {
 	
+	export class Match {
+	    file_path: string;
+	    matches: string[];
+	
+	    static createFrom(source: any = {}) {
+	        return new Match(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.file_path = source["file_path"];
+	        this.matches = source["matches"];
+	    }
+	}
 	export class Node {
 	    name: string;
 	    path: string;

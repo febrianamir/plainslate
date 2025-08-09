@@ -6,12 +6,14 @@ import (
 )
 
 type Usecase struct {
-	Ctx    context.Context
-	Config *lib.Config
+	Ctx      context.Context
+	Config   *lib.Config
+	Searcher *lib.Searcher
 }
 
-func NewUsecase(c *lib.Config) *Usecase {
+func NewUsecase(c *lib.Config, s *lib.Searcher) *Usecase {
 	return &Usecase{
-		Config: c,
+		Config:   c,
+		Searcher: s,
 	}
 }

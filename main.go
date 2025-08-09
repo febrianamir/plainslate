@@ -27,7 +27,8 @@ func main() {
 			zap.Error(err),
 		)
 	}
-	u := usecase.NewUsecase(c)
+	s := lib.NewSearcher()
+	u := usecase.NewUsecase(c, s)
 	app := NewApp(u)
 
 	// Create application with options

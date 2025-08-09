@@ -1,7 +1,8 @@
 <script>
+  import Search from './search/Search.svelte'
   import Tree from './tree/Tree.svelte'
   import SetRootPath from '../SetRootPath.svelte'
-  import { FileText, Search } from 'lucide-svelte'
+  import { FileText, Search as SearchIcon } from 'lucide-svelte'
   import { onDestroy, onMount } from 'svelte'
   import { handleEnter } from '../../../src/lib/utils.js'
 
@@ -67,14 +68,16 @@
             handleEnter(e, () => handleActiveTab('search'))
           }}
         >
-          <Search size={24} strokeWidth={2.5} />
+          <SearchIcon size={24} strokeWidth={2.5} />
         </div>
       </div>
       <div class="sidebar-activity-content">
         <div class="sidebar-explorer {activeTab === 'explorer' ? 'active' : ''}">
           <Tree />
         </div>
-        <div class="sidebar-search {activeTab === 'search' ? 'active' : ''}"></div>
+        <div class="sidebar-search {activeTab === 'search' ? 'active' : ''}">
+          <Search />
+        </div>
       </div>
     </div>
   </div>
@@ -128,6 +131,7 @@
 
   .sidebar-activity-content {
     flex: 1;
+    min-width: 0;
   }
 
   .sidebar-explorer,
