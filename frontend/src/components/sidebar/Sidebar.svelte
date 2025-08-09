@@ -2,6 +2,7 @@
   import Tree from './tree/Tree.svelte'
   import SetRootPath from '../SetRootPath.svelte'
   import { FileText, Search } from 'lucide-svelte'
+  import { onDestroy, onMount } from 'svelte'
 
   let width = 250
   let isResizing = false
@@ -26,9 +27,15 @@
     isResizing = false
   }
 
-  // Register global mouse events
-  window.addEventListener('mousemove', onMouseMove)
-  window.addEventListener('mouseup', stopResize)
+  onMount(() => {
+    window.addEventListener('mousemove', onMouseMove)
+    window.addEventListener('mouseup', stopResize)
+  })
+
+  onDestroy(() => {
+    window.removeEventListener('mousemove', onMouseMove)
+    window.removeEventListener('mouseup', stopResize)
+  })
 </script>
 
 <div class="sidebar">
