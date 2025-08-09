@@ -21,6 +21,7 @@ func InitLogger() {
 	}
 
 	fileWriter := zapcore.AddSync(&lumberjackWriter{path: logPath})
+	consoleWriter := zapcore.AddSync(os.Stdout)
 
 	encoderCfg := zapcore.EncoderConfig{
 		TimeKey:      "timestamp",
@@ -33,14 +34,20 @@ func InitLogger() {
 		EncodeCaller: zapcore.ShortCallerEncoder,
 	}
 
-	core := zapcore.NewCore(
+	fileCore := zapcore.NewCore(
 		zapcore.NewJSONEncoder(encoderCfg),
 		fileWriter,
 		zapcore.DebugLevel,
 	)
+	consoleCore := zapcore.NewCore(
+		zapcore.NewConsoleEncoder(encoderCfg),
+		consoleWriter,
+		zapcore.DebugLevel,
+	)
+	combinedCore := zapcore.NewTee(fileCore, consoleCore)
 
 	instance = zap.New(
-		core,
+		combinedCore,
 		zap.AddCaller(),
 	)
 }
