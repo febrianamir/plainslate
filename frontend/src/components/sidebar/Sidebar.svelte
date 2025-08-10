@@ -6,9 +6,9 @@
   import { onDestroy, onMount } from 'svelte'
   import { handleEnter } from '../../../src/lib/utils.js'
 
-  let sidebarWidth = 250
-  let isSidebarResizing = false
-  let activeTab = 'explorer'
+  let sidebarWidth = $state(250)
+  let isSidebarResizing = $state(false)
+  let activeTab = $state('explorer')
 
   function startResize(e) {
     e.preventDefault()
@@ -48,11 +48,13 @@
       <div class="sidebar-activity-bar">
         <div
           class="sidebar-explorer-button {activeTab === 'explorer' ? 'active' : ''}"
-          on:click={(e) => {
+          role="button"
+          tabindex="0"
+          onclick={(e) => {
             e.preventDefault()
             handleActiveTab('explorer')
           }}
-          on:keydown={(e) => {
+          onkeydown={(e) => {
             handleEnter(e, () => handleActiveTab('explorer'))
           }}
         >
@@ -60,11 +62,13 @@
         </div>
         <div
           class="sidebar-search-button {activeTab === 'search' ? 'active' : ''}"
-          on:click={(e) => {
+          role="button"
+          tabindex="0"
+          onclick={(e) => {
             e.preventDefault()
             handleActiveTab('search')
           }}
-          on:keydown={(e) => {
+          onkeydown={(e) => {
             handleEnter(e, () => handleActiveTab('search'))
           }}
         >
@@ -81,7 +85,13 @@
       </div>
     </div>
   </div>
-  <div class="sidebar-resizer" class:active={isSidebarResizing} on:mousedown={startResize}></div>
+  <div
+    class="sidebar-resizer"
+    role="button"
+    tabindex="0"
+    class:active={isSidebarResizing}
+    onmousedown={startResize}
+  ></div>
 </div>
 
 <style>

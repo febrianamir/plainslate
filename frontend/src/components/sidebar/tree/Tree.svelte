@@ -8,18 +8,17 @@
 
   let unsubRootPath
   let depth = 0
-  let tree = null
+  let tree = $state(null)
+
   let parentMap = new Map()
-  // forceTreeUpdate to force reactivity after changes to tree
-  function forceTreeUpdate() {
-    tree = structuredClone(tree)
+  function indexTreeParents() {
     parentMap = indexParents(tree)
   }
 
   // Context menu properties
-  let isShowContextMenu = false
-  let contextMenuX = 0
-  let contextMenuY = 0
+  let isShowContextMenu = $state(false)
+  let contextMenuX = $state(0)
+  let contextMenuY = $state(0)
   let contextMenuTargetNode = null
 
   onMount(() => {
@@ -29,7 +28,7 @@
         try {
           const result = await GetNodeTree()
           tree = addNodeField(result)
-          parentMap = indexParents(tree)
+          indexTreeParents()
         } catch (err) {
           console.error('Error fetching node tree:', err)
           tree = null
@@ -89,7 +88,7 @@
 
     insertNode(parentNode, newNode)
     contextMenuTargetNode.expanded = true
-    forceTreeUpdate()
+    indexTreeParents()
   }
 
   function showCreateFolderInput() {
@@ -115,7 +114,7 @@
 
     insertNode(parentNode, newNode)
     contextMenuTargetNode.expanded = true
-    forceTreeUpdate()
+    indexTreeParents()
   }
 
   function showRenameInput() {
@@ -125,14 +124,13 @@
 
     let targetFullPath = contextMenuTargetNode.path
     let parentNode = parentMap.get(targetFullPath)
-
     let dirPath = parentNode.path
+
     // Change view node to rename node
     contextMenuTargetNode.parent = parentNode
     contextMenuTargetNode.state = 'rename'
     contextMenuTargetNode.oldPath = contextMenuTargetNode.path
-
-    forceTreeUpdate()
+    indexTreeParents()
   }
 
   async function moveItemToTrash() {
@@ -144,7 +142,7 @@
     try {
       await MoveToTrash(moveToTrashNode.path)
       removeNode(moveToTrashNode)
-      forceTreeUpdate()
+      indexTreeParents()
     } catch (err) {
       console.error('Error move to trash:', err)
     }
@@ -205,10 +203,11 @@
 <div class="directory-tree">
   {#if tree}
     <TreeNode
+      parentMap={parentMap}
       sortNodeChildren={sortNodeChildren}
       removeNode={removeNode}
-      forceTreeUpdate={forceTreeUpdate}
-      node={tree}
+      indexTreeParents={indexTreeParents}
+      bind:node={tree}
       onRightClick={onRightClick}
       isShowContextMenu={isShowContextMenu}
       closeContextMenu={closeContextMenu}

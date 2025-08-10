@@ -1,12 +1,14 @@
 <script>
   import { SetRootPath } from '../../wailsjs/go/usecase/Usecase.js'
   import { rootPath } from '../stores/global.js'
-  import { onMount } from 'svelte'
+  import { onDestroy, onMount } from 'svelte'
   import { handleEnter } from '../../src/lib/utils.js'
 
-  let path = ''
-  let errorMessage = ''
-  let successMessage = ''
+  let path = $state('')
+  let errorMessage = $state('')
+  let successMessage = $state('')
+
+  let unsubRootPath
 
   async function setRootPath() {
     errorMessage = ''
@@ -25,13 +27,16 @@
   }
 
   onMount(() => {
-    let unsubRootPath = rootPath.subscribe(async (dir) => {
-      // Set initial input value from rootPath store (populated from config file on startup)
+    unsubRootPath = rootPath.subscribe(async (dir) => {
+      // Set input value from rootPath store
       if (dir) {
         path = dir
-        unsubRootPath?.()
       }
     })
+  })
+
+  onDestroy(() => {
+    unsubRootPath?.()
   })
 </script>
 
@@ -41,7 +46,7 @@
     bind:value={path}
     placeholder="Enter directory path"
     style="flex: 1; padding: 0.5rem;"
-    on:keydown={onKeyDown}
+    onkeydown={onKeyDown}
   />
 </div>
 

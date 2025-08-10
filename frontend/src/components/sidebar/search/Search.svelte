@@ -2,8 +2,8 @@
   import { SearchInFiles } from '../../../../wailsjs/go/usecase/Usecase.js'
   import SearchResultItem from './SearchResultItem.svelte'
 
-  let query = ''
-  let results = []
+  let query = $state('')
+  let results = $state([])
   let searchDebounceTimer
 
   function handleInput() {
@@ -38,7 +38,7 @@
     <input
       class="search-input"
       bind:value={query}
-      on:input={handleInput}
+      oninput={handleInput}
       placeholder="Search in folder..."
     />
   </div>

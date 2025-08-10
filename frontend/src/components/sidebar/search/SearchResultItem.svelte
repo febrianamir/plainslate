@@ -3,18 +3,16 @@
   import { handleEnter } from '../../../../src/lib/utils'
   import { onDestroy, onMount } from 'svelte'
 
-  export let filename
-  export let path
-  export let fileMatches
+  let { filename, path, fileMatches } = $props()
 
   let clientX = 0
   let clientY = 0
 
-  let isExpanded = true
-  let isShowTooltip = false
-  let tooltipX = 0
-  let tooltipY = 0
-  let tooltipShowTimer
+  let isExpanded = $state(true)
+  let isShowTooltip = $state(false)
+  let tooltipX = $state(0)
+  let tooltipY = $state(0)
+  let tooltipShowTimer = $state()
 
   function toggleExpand() {
     isExpanded = !isExpanded
@@ -47,21 +45,23 @@
 <div class="search-result-item">
   <div
     class="search-result-file"
-    on:click={() => {
+    role="button"
+    tabindex="0"
+    onclick={() => {
       clearTimeout(tooltipShowTimer)
       toggleExpand()
     }}
-    on:keydown={(e) => {
+    onkeydown={(e) => {
       clearTimeout(tooltipShowTimer)
       handleEnter(e, toggleExpand)
     }}
-    on:mouseenter={(e) => {
+    onmouseenter={(e) => {
       clearTimeout(tooltipShowTimer)
       tooltipShowTimer = setTimeout(() => {
         openTooltip(e)
       }, 1000)
     }}
-    on:mouseleave={() => {
+    onmouseleave={() => {
       clearTimeout(tooltipShowTimer)
       closeTooltip()
     }}

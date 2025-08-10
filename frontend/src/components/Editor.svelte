@@ -4,13 +4,15 @@
   import { onMount, onDestroy } from 'svelte'
   import { get } from 'svelte/store'
 
-  export let filename = 'Untitled'
-  export let fileContent = ''
-  export let savedFileContent = ''
-  export let hasUnsavedChanges = false
-  export let placeholder = 'Write your markdown here...'
-  export let rows = 35
-  export let cols = 100
+  let {
+    filename = $bindable('Untitled'),
+    fileContent = $bindable(''),
+    savedFileContent = $bindable(''),
+    hasUnsavedChanges = $bindable(false),
+    placeholder = 'Write your markdown here...',
+    rows = 35,
+    cols = 100,
+  } = $props()
 
   let unsubOpenedFile
   let errorMessage = ''
@@ -89,7 +91,7 @@
     rows={rows}
     cols={cols}
     placeholder={placeholder}
-    on:input={handleInput}
+    oninput={handleInput}
   ></textarea>
 </div>
 

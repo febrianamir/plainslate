@@ -1,13 +1,14 @@
 <script>
   import { handleEnter } from '../../../../src/lib/utils.js'
 
-  export let contextMenuX = 0
-  export let contextMenuY = 0
-
-  export let showCreateFileInput = () => {}
-  export let showCreateFolderInput = () => {}
-  export let showRenameInput = () => {}
-  export let moveItemToTrash = () => {}
+  let {
+    contextMenuX = 0,
+    contextMenuY = 0,
+    showCreateFileInput = () => {},
+    showCreateFolderInput = () => {},
+    showRenameInput = () => {},
+    moveItemToTrash = () => {},
+  } = $props()
 </script>
 
 <div class="context-menu" style="top:{contextMenuY}px; left:{contextMenuX}px;">
@@ -15,8 +16,8 @@
     role="button"
     tabindex="0"
     class="context-item"
-    on:click={showCreateFileInput}
-    on:keydown={(e) => {
+    onclick={showCreateFileInput}
+    onkeydown={(e) => {
       handleEnter(e, showCreateFileInput)
     }}
   >
@@ -26,8 +27,8 @@
     role="button"
     tabindex="0"
     class="context-item"
-    on:click={showCreateFolderInput}
-    on:keydown={(e) => {
+    onclick={showCreateFolderInput}
+    onkeydown={(e) => {
       handleEnter(e, showCreateFolderInput)
     }}
   >
@@ -38,8 +39,8 @@
     role="button"
     tabindex="0"
     class="context-item"
-    on:click={showRenameInput}
-    on:keydown={(e) => {
+    onclick={showRenameInput}
+    onkeydown={(e) => {
       handleEnter(e, showRenameInput)
     }}
   >
@@ -49,8 +50,8 @@
     role="button"
     tabindex="0"
     class="context-item"
-    on:click={moveItemToTrash}
-    on:keydown={(e) => {
+    onclick={moveItemToTrash}
+    onkeydown={(e) => {
       handleEnter(e, moveItemToTrash)
     }}
   >

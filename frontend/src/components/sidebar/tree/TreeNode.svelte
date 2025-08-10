@@ -6,27 +6,33 @@
   import { CreateDirectory, RenamePath } from '../../../../wailsjs/go/usecase/Usecase.js'
   import { handleEnter } from '../../../../src/lib/utils.js'
 
-  export let node
-  export let isShowContextMenu = false
-  export let closeContextMenu = () => {}
-  export let onRightClick = () => {}
-  export let removeNode = () => {}
-  export let sortNodeChildren = () => {}
-  export let forceTreeUpdate = () => {}
+  let {
+    parentMap,
+    node = $bindable(),
+    isShowContextMenu = false,
+    closeContextMenu = () => {},
+    onRightClick = () => {},
+    removeNode = () => {},
+    sortNodeChildren = () => {},
+    indexTreeParents = () => {},
+    depth = 0,
+  } = $props()
 
-  export let depth = 0
+  let nodeActive = $state(false)
+  $effect(() => {
+    nodeActive = $openedFile === node.path
+  })
 
-  let nodeActive = false
-  $: nodeActive = $openedFile === node.path
+  let inputRef = $state()
+  $effect(() => {
+    if (node.state !== 'view') {
+      tick().then(() => {
+        inputRef?.focus()
+      })
+    }
+  })
 
-  let inputRef
-  $: if (node.state !== 'view') {
-    tick().then(() => {
-      inputRef?.focus()
-    })
-  }
-
-  let nodeEl
+  let nodeEl = $state()
 
   function onClick() {
     if (isShowContextMenu) {
@@ -43,7 +49,6 @@
 
   function toggleExpandFolder() {
     node.expanded = !node.expanded
-    forceTreeUpdate()
   }
 
   function openFile() {
@@ -57,10 +62,11 @@
 
     openFile()
     if (node.parent) {
-      sortNodeChildren(node.parent)
+      let parentNode = node.parent
       delete node.parent
+      sortNodeChildren(parentNode)
     }
-    forceTreeUpdate()
+    indexTreeParents()
   }
 
   async function createFolder() {
@@ -69,11 +75,13 @@
       await CreateDirectory(dirPath)
       node.path = dirPath
       node.state = 'view'
+
       if (node.parent) {
-        sortNodeChildren(node.parent)
+        let parentNode = node.parent
         delete node.parent
+        sortNodeChildren(parentNode)
       }
-      forceTreeUpdate()
+      indexTreeParents()
     } catch (err) {
       console.error('Error creating directory:', err)
     }
@@ -92,12 +100,14 @@
       }
       node.path = newPath
       node.state = 'view'
+
       if (node.parent) {
-        sortNodeChildren(node.parent)
+        let parentNode = node.parent
         delete node.parent
         delete node.oldPath
+        sortNodeChildren(parentNode)
       }
-      forceTreeUpdate()
+      indexTreeParents()
     } catch (err) {
       console.error('Error renaming path:', err)
     }
@@ -119,7 +129,7 @@
           delete node.oldPath
           delete node.parent
       }
-      forceTreeUpdate()
+      indexTreeParents()
     }
   }
 
@@ -141,9 +151,9 @@
     class:active={nodeActive}
     class:edit={node.state !== 'view'}
     style="--depth: {depth + 1}"
-    on:click={onClick}
-    on:contextmenu={(e) => onRightClick(node, e)}
-    on:keydown={(e) => {
+    onclick={onClick}
+    oncontextmenu={(e) => onRightClick(node, e)}
+    onkeydown={(e) => {
       const target = e.target
 
       // Prevent file open when editing an input or any editable content
@@ -178,10 +188,8 @@
           type="text"
           bind:this={inputRef}
           bind:value={node.name}
-          on:keydown={(e) => {
-            console.log('onkeydown')
+          onkeydown={(e) => {
             handleEnter(e, () => {
-              console.log('enter')
               if (node.state === 'create' && node.type === 'file') {
                 return createFile()
               }
@@ -202,12 +210,13 @@
 
   {#if node.expanded && node.children}
     <div>
-      {#each node.children as child}
+      {#each node.children as child, i}
         <TreeNode
+          parentMap={parentMap}
           sortNodeChildren={sortNodeChildren}
           removeNode={removeNode}
-          forceTreeUpdate={forceTreeUpdate}
-          node={child}
+          indexTreeParents={indexTreeParents}
+          bind:node={node.children[i]}
           onRightClick={onRightClick}
           isShowContextMenu={isShowContextMenu}
           closeContextMenu={closeContextMenu}
