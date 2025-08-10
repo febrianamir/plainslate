@@ -76,8 +76,11 @@
         <ChevronRight size={16} strokeWidth={3} />
       {/if}
     </div>
-    <div>
+    <div class="search-result-filename">
       {filename}
+    </div>
+    <div class="search-result-file-count">
+      {fileMatches.length}
     </div>
   </div>
   <div class="search-result-matches" class:active={isExpanded}>
@@ -106,6 +109,22 @@
     cursor: default;
     font-weight: 600;
     padding-top: 0.25rem;
+  }
+
+  .search-result-filename {
+    flex: 1;
+  }
+
+  .search-result-file-count {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 18px;
+    height: 18px;
+    font-weight: 400;
+    font-size: 0.65rem;
+    border-radius: 20px;
+    background: #2d2d2d;
   }
 
   .search-result-matches {

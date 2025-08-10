@@ -10,6 +10,7 @@
   let depth = 0
   let tree = $state(null)
 
+  // svelte-ignore non_reactive_update
   let parentMap = new Map()
   function indexTreeParents() {
     parentMap = indexParents(tree)
