@@ -34,12 +34,14 @@
 </script>
 
 <div class="search">
-  <input
-    class="search-input"
-    bind:value={query}
-    on:input={handleInput}
-    placeholder="Search in folder..."
-  />
+  <div class="search-bar">
+    <input
+      class="search-input"
+      bind:value={query}
+      on:input={handleInput}
+      placeholder="Search in folder..."
+    />
+  </div>
 
   <div class="search-result">
     {#each results as file}
@@ -54,9 +56,14 @@
 
 <style>
   .search {
+    display: flex;
+    flex-direction: column;
     overflow-x: hidden;
-    overflow-y: scroll;
-    padding: 0.5rem 0.75rem 0.5rem 0.25rem;
+    padding: 0.5rem 0 0 0.25rem;
+  }
+
+  .search-bar {
+    padding-right: 0.75rem;
   }
 
   .search-input {
@@ -73,7 +80,23 @@
   }
 
   .search-result {
-    padding: 0.5rem 0;
+    flex: 1;
+    padding: 0.5rem 0.75rem 0 0;
     font-size: 0.85rem;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  .search-result::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .search-result::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .search-result::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
   }
 </style>

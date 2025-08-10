@@ -231,6 +231,7 @@
 <style>
   .directory-tree {
     width: 100%;
+    min-height: 0;
     overflow-x: hidden;
     overflow-y: scroll;
   }

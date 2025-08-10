@@ -98,6 +98,7 @@
     flex-direction: column;
     max-width: 100%;
     width: 100%;
+    height: 100%;
     overflow: hidden;
     padding-top: 1rem;
   }
@@ -108,6 +109,8 @@
 
   .sidebar-activity {
     display: flex;
+    flex: 1;
+    min-height: 0;
   }
 
   .sidebar-activity-bar {
@@ -130,6 +133,8 @@
   }
 
   .sidebar-activity-content {
+    display: flex;
+    flex-direction: column;
     flex: 1;
     min-width: 0;
   }
@@ -137,11 +142,14 @@
   .sidebar-explorer,
   .sidebar-search {
     display: none;
+    flex: 1;
+    min-height: 0;
   }
 
   .sidebar-explorer.active,
   .sidebar-search.active {
-    display: block;
+    display: flex;
+    flex-direction: column;
   }
 
   .sidebar-resizer {
