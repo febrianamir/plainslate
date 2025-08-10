@@ -132,7 +132,6 @@
     font-weight: 400;
     font-size: 12px;
     white-space: nowrap;
-    /* border-radius: 4px; */
     border: 1px solid #9d9d9d;
     transform: translateY(-4px);
   }

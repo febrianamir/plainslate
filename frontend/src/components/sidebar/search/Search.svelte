@@ -12,6 +12,7 @@
       if (query.trim()) {
         try {
           const result = await SearchInFiles(query)
+          sortSearchResultFiles(result)
           results = result
         } catch (err) {
           console.log('Error search in files:', err)
@@ -20,6 +21,15 @@
         results = []
       }
     }, 200) // Debounce delay
+  }
+
+  function sortSearchResultFiles(results) {
+    // Sort: alphabetically by name
+    results.sort((a, b) => {
+      let aFilename = a.file_path.split('/').pop()
+      let bFilename = b.file_path.split('/').pop()
+      return aFilename.localeCompare(bFilename, undefined, { sensitivity: 'base' })
+    })
   }
 </script>
 
