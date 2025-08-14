@@ -1,5 +1,5 @@
 <script>
-  import Editor from './components/Editor.svelte'
+  import EditorWokspace from './components/editor/EditorWokspace.svelte'
   import Sidebar from './components/sidebar/Sidebar.svelte'
   import { GetConfig } from '../wailsjs/go/usecase/Usecase.js'
   import { rootPath } from './stores/global.js'
@@ -15,7 +15,7 @@
 
 <div class="app">
   <Sidebar />
-  <Editor />
+  <EditorWokspace />
 </div>
 
 <style>

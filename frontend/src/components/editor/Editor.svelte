@@ -1,42 +1,37 @@
 <script>
-  import { OpenOrCreateFile, SaveFile } from '../../wailsjs/go/usecase/Usecase.js'
-  import { openedFile } from '../stores/global.js'
+  import { OpenOrCreateFile, SaveFile } from '../../../wailsjs/go/usecase/Usecase.js'
+  import { getOpenedFiles, getActiveFile } from '../../state/openedFile.svelte'
   import { onMount, onDestroy } from 'svelte'
-  import { get } from 'svelte/store'
 
-  let {
-    filename = $bindable('Untitled'),
-    fileContent = $bindable(''),
-    savedFileContent = $bindable(''),
-    hasUnsavedChanges = $bindable(false),
-    placeholder = 'Write your markdown here...',
-    rows = 35,
-    cols = 100,
-  } = $props()
+  let openedFiles = getOpenedFiles()
+  let rows = 35
+  let cols = 100
+  let placeholder = 'Write your markdown here...'
 
-  let unsubOpenedFile
-  let errorMessage = ''
-  let successMessage = ''
+  let activeFile = $state({})
+  $effect(() => {
+    if (openedFiles.activeId) {
+      activeFile = getActiveFile()
+    } else {
+      activeFile = {}
+    }
+  })
 
   function handleInput(e) {
-    fileContent = e.target.value
-    hasUnsavedChanges = fileContent !== savedFileContent
-    dispatchEvent(new CustomEvent('input', { detail: fileContent }))
+    activeFile.fileContent = e.target.value
+    activeFile.hasUnsavedChanges = activeFile.fileContent !== activeFile.savedFileContent
   }
 
   async function saveFile() {
     // Only save changed files
-    if (hasUnsavedChanges) {
-      errorMessage = ''
-      successMessage = ''
+    if (activeFile.hasUnsavedChanges) {
       try {
-        let saveFilePath = get(openedFile)
-        await SaveFile(saveFilePath, fileContent)
-        successMessage = 'File saved!'
-        savedFileContent = fileContent
-        hasUnsavedChanges = false
+        let saveFilePath = activeFile.filepath
+        await SaveFile(saveFilePath, activeFile.fileContent)
+        activeFile.savedFileContent = activeFile.fileContent
+        activeFile.hasUnsavedChanges = false
       } catch (err) {
-        errorMessage = err.message || 'Failed to save file.'
+        console.log('Failed to save file:', err)
       }
     }
   }
@@ -50,44 +45,28 @@
   }
 
   onMount(() => {
-    unsubOpenedFile = openedFile.subscribe(async (path) => {
-      if (path && path.trim() !== '') {
-        // Open file
-        try {
-          const result = await OpenOrCreateFile(path)
-          fileContent = result
-          savedFileContent = result
-          hasUnsavedChanges = false
-        } catch (err) {
-          console.error('Error fetching file:', err)
-          fileContent = ''
-        }
-
-        // Set tab filename
-        filename = path.split('/').pop()
-      }
-    })
     window.addEventListener('keydown', onKeyDown)
   })
 
   onDestroy(() => {
-    unsubOpenedFile?.()
     window.removeEventListener('keydown', onKeyDown)
   })
 </script>
 
 <div class="editor">
   <div class="editor-tab">
-    <div class="editor-tab-item">
-      <div class="editor-tab-text">
-        {filename}
+    {#each openedFiles.files as file}
+      <div class="editor-tab-item">
+        <div class="editor-tab-text">
+          {file.filename}
+        </div>
+        <div class="editor-tab-indicator" class:active={file.hasUnsavedChanges}></div>
       </div>
-      <div class="editor-tab-indicator" class:active={hasUnsavedChanges}></div>
-    </div>
+    {/each}
   </div>
   <textarea
     class="editor-textarea"
-    bind:value={fileContent}
+    bind:value={activeFile.fileContent}
     rows={rows}
     cols={cols}
     placeholder={placeholder}
@@ -101,7 +80,6 @@
     flex-direction: column;
     height: 100vh;
     overflow: hidden;
-    flex: 1;
   }
 
   .editor-tab {

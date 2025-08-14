@@ -2,8 +2,14 @@
   import { Folder, FolderOpen, File } from 'lucide-svelte'
   import TreeNode from './TreeNode.svelte'
   import { openedFile } from '../../../stores/global.js'
+  import { openedFilesOpen } from '../../../state/openedFile.svelte'
   import { onMount, onDestroy, tick } from 'svelte'
-  import { CreateDirectory, RenamePath } from '../../../../wailsjs/go/usecase/Usecase.js'
+  import {
+    CreateDirectory,
+    RenamePath,
+    OpenOrCreateFile,
+    SaveFile,
+  } from '../../../../wailsjs/go/usecase/Usecase.js'
   import { handleEnter } from '../../../../src/lib/utils.js'
 
   let {
@@ -51,8 +57,22 @@
     node.expanded = !node.expanded
   }
 
-  function openFile() {
-    openedFile.set(node.path)
+  async function openFile() {
+    if (node.path && node.path.trim() !== '') {
+      try {
+        const result = await OpenOrCreateFile(node.path)
+        openedFilesOpen({
+          id: node.path,
+          filepath: node.path,
+          filename: node.path.split('/').pop(),
+          fileContent: result,
+          savedFileContent: result,
+          hasUnsavedChanges: false,
+        })
+      } catch (err) {
+        console.error('Error open file:', err)
+      }
+    }
   }
 
   function createFile() {
