@@ -2,7 +2,7 @@
   import { Folder, FolderOpen, File } from 'lucide-svelte'
   import TreeNode from './TreeNode.svelte'
   import { openedFile } from '../../../stores/global.js'
-  import { openedFilesOpen } from '../../../state/openedFile.svelte'
+  import { openedFilesOpen, openedFilesUpdateFile } from '../../../state/openedFile.svelte'
   import { onMount, onDestroy, tick } from 'svelte'
   import {
     CreateDirectory,
@@ -121,11 +121,20 @@
       node.path = newPath
       node.state = 'view'
 
-      if (node.parent) {
-        let parentNode = node.parent
-        delete node.parent
-        delete node.oldPath
+      // Sort node after rename
+      let parentNode = parentMap.get(node.oldPath)
+      if (parentNode) {
         sortNodeChildren(parentNode)
+      }
+
+      // Update opened file data
+      if (node.oldPath) {
+        openedFilesUpdateFile(node.oldPath, {
+          id: node.path,
+          filepath: node.path,
+          filename: node.name,
+        })
+        delete node.oldPath
       }
       indexTreeParents()
     } catch (err) {

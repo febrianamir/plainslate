@@ -128,7 +128,6 @@
     let dirPath = parentNode.path
 
     // Change view node to rename node
-    contextMenuTargetNode.parent = parentNode
     contextMenuTargetNode.state = 'rename'
     contextMenuTargetNode.oldPath = contextMenuTargetNode.path
     indexTreeParents()

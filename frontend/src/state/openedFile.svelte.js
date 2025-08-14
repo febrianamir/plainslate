@@ -14,7 +14,6 @@ export function getActiveFile() {
 }
 
 export function openedFilesOpen(file) {
-  console.log(openedFiles)
   // Prevent duplicates
   if (!isFileExist(file.id)) {
     openedFiles.files.push(file)
@@ -38,12 +37,12 @@ export function openedFilesSelect(fileId) {
   }
 }
 
-export function openedFilesUpdate(fileId, newContent) {
+export function openedFilesUpdateFile(fileId, updatedData) {
   let file = openedFiles.files.find((f) => {
     return f.id === fileId
   })
   if (file) {
-    file.fileContent = newContent
+    Object.assign(file, updatedData)
   }
 }
 
