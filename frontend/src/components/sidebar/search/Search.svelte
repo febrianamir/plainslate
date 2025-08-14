@@ -48,6 +48,7 @@
       <SearchResultItem
         filename={file.file_path.split('/').pop()}
         fileMatches={file.matches}
+        query={query}
         path={file.file_path}
       />
     {/each}

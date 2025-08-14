@@ -3,7 +3,7 @@
   import { handleEnter } from '../../../../src/lib/utils'
   import { onDestroy, onMount } from 'svelte'
 
-  let { filename, path, fileMatches } = $props()
+  let { filename, path, fileMatches, query } = $props()
 
   let clientX = 0
   let clientY = 0
@@ -12,7 +12,7 @@
   let isShowTooltip = $state(false)
   let tooltipX = $state(0)
   let tooltipY = $state(0)
-  let tooltipShowTimer = $state()
+  let tooltipShowTimer
 
   function toggleExpand() {
     isExpanded = !isExpanded
@@ -31,6 +31,33 @@
   function onMouseMove(e) {
     clientX = e.clientX
     clientY = e.clientY
+  }
+
+  // Function to split line into parts with matched query highlighted
+  function highlightMatch(line, query) {
+    if (!query) return [{ text: line, match: false }]
+
+    const regex = new RegExp(`(${escapeRegExp(query)})`, 'gi')
+    let parts = []
+    let lastIndex = 0
+    let match
+
+    while ((match = regex.exec(line)) !== null) {
+      if (match.index > lastIndex) {
+        parts.push({ text: line.slice(lastIndex, match.index), match: false })
+      }
+      parts.push({ text: match[0], match: true })
+      lastIndex = match.index + match[0].length
+    }
+    if (lastIndex < line.length) {
+      parts.push({ text: line.slice(lastIndex), match: false })
+    }
+    return parts
+  }
+
+  // Escape regex special chars in query
+  function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
   }
 
   onMount(() => {
@@ -83,9 +110,17 @@
       {fileMatches.length}
     </div>
   </div>
-  <div class="search-result-matches" class:active={isExpanded}>
+  <div class:active={isExpanded} class="search-result-matches">
     {#each fileMatches as match}
-      <div class="search-result-match">{match}</div>
+      <div class="search-result-match">
+        {#each highlightMatch(match, query) as part}
+          {#if part.match}
+            <span class="search-result-highlight">{part.text}</span>
+          {:else}
+            {part.text}
+          {/if}
+        {/each}
+      </div>
     {/each}
   </div>
 </div>
@@ -137,7 +172,17 @@
 
   .search-result-match {
     cursor: pointer;
+    padding: 0.15rem 0;
     padding-left: 0.75rem;
+  }
+
+  .search-result-match:hover {
+    background-color: #2b2b2b;
+  }
+
+  .search-result-highlight {
+    background-color: #c9e6c1;
+    color: #1e1e1e;
   }
 
   .search-tooltip {
