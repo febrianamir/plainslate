@@ -56,7 +56,7 @@
 <div class="editor">
   <div class="editor-tab">
     {#each openedFiles.files as file}
-      <div class="editor-tab-item">
+      <div class:active={file.id === openedFiles.activeId} class="editor-tab-item">
         <div class="editor-tab-text">
           {file.filename}
         </div>
@@ -90,11 +90,11 @@
   .editor-tab-item {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.5rem;
     position: relative;
     cursor: pointer;
     font-size: 0.85rem;
-    padding: 0.5rem 0.4rem 0.5rem 0.7rem;
+    padding: 0.6rem 0.65rem 0.6rem 0.7rem;
     color: #9d9d9d;
   }
 
@@ -109,7 +109,7 @@
     background-color: #c9e6c1;
   }
 
-  .editor-tab-item::after {
+  .editor-tab-item.active::after {
     content: '';
     position: absolute;
     bottom: -1px; /* Align with .tab's black border */
