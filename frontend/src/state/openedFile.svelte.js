@@ -46,6 +46,10 @@ export function openedFilesUpdateFile(fileId, updatedData) {
   }
 }
 
+export function openedFilesCheckExist(fileId) {
+  return isFileExist(fileId)
+}
+
 function isFileExist(fileId) {
   return openedFiles.files.find((f) => {
     return f.id === fileId

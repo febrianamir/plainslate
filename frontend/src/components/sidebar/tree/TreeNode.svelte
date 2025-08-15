@@ -2,7 +2,12 @@
   import { Folder, FolderOpen, File } from 'lucide-svelte'
   import TreeNode from './TreeNode.svelte'
   import { openedFile } from '../../../stores/global.js'
-  import { openedFilesOpen, openedFilesUpdateFile } from '../../../state/openedFile.svelte'
+  import {
+    openedFilesOpen,
+    openedFilesUpdateFile,
+    openedFilesCheckExist,
+    openedFilesSelect,
+  } from '../../../state/openedFile.svelte'
   import { onMount, onDestroy, tick } from 'svelte'
   import {
     CreateDirectory,
@@ -59,6 +64,10 @@
 
   async function openFile() {
     if (node.path && node.path.trim() !== '') {
+      if (openedFilesCheckExist(node.path)) {
+        return openedFilesSelect(node.path)
+      }
+
       try {
         const result = await OpenOrCreateFile(node.path)
         openedFilesOpen({
