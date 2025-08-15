@@ -63,17 +63,18 @@
   }
 
   async function openFile() {
-    if (node.path && node.path.trim() !== '') {
-      if (openedFilesCheckExist(node.path)) {
-        return openedFilesSelect(node.path)
+    let filePath = node.path
+    if (filePath && filePath.trim() !== '') {
+      if (openedFilesCheckExist(filePath)) {
+        return openedFilesSelect(filePath)
       }
 
       try {
-        const result = await OpenOrCreateFile(node.path)
+        const result = await OpenOrCreateFile(filePath)
         openedFilesOpen({
-          id: node.path,
-          filepath: node.path,
-          filename: node.path.split('/').pop(),
+          id: filePath,
+          filepath: filePath,
+          filename: filePath.split('/').pop(),
           fileContent: result,
           savedFileContent: result,
           hasUnsavedChanges: false,
