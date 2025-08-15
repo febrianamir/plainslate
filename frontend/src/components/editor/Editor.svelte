@@ -1,7 +1,7 @@
 <script>
   import { debounce } from '../../lib/utils'
   import { OpenOrCreateFile, SaveFile } from '../../../wailsjs/go/usecase/Usecase.js'
-  import { getOpenedFiles, getActiveFile } from '../../state/openedFile.svelte'
+  import { getOpenedFiles, getActiveFile, openedFilesSelect } from '../../state/openedFile.svelte'
   import { onMount, onDestroy } from 'svelte'
 
   let openedFiles = getOpenedFiles()
@@ -40,6 +40,11 @@
     }
   }
 
+  function switchActiveFile(fileId) {
+    console.log(fileId)
+    openedFilesSelect(fileId)
+  }
+
   async function onKeyDown(e) {
     if ((e.ctrlKey || e.metaKey) && e.key === 's') {
       // Ctrl+S or Command+S for MacOS
@@ -60,7 +65,16 @@
 <div class="editor">
   <div class="editor-tab">
     {#each openedFiles.files as file}
-      <div class:active={file.id === openedFiles.activeId} class="editor-tab-item">
+      <div
+        role="button"
+        tabindex="0"
+        class:active={file.id === openedFiles.activeId}
+        class="editor-tab-item"
+        onclick={(e) => switchActiveFile(file.id)}
+        onkeydown={(e) => {
+          handleEnter(e, () => switchActiveFile(file.id))
+        }}
+      >
         <div class="editor-tab-text">
           {file.filename}
         </div>
@@ -102,17 +116,6 @@
     color: #9d9d9d;
   }
 
-  .editor-tab-indicator {
-    margin-top: 1px;
-    width: 5px;
-    height: 5px;
-    border-radius: 5px;
-  }
-
-  .editor-tab-indicator.active {
-    background-color: #c9e6c1;
-  }
-
   .editor-tab-item.active::after {
     content: '';
     position: absolute;
@@ -123,6 +126,17 @@
     height: 2px;
     background-color: #6da96f;
     border-radius: 1px;
+  }
+
+  .editor-tab-indicator {
+    margin-top: 1px;
+    width: 5px;
+    height: 5px;
+    border-radius: 5px;
+  }
+
+  .editor-tab-indicator.active {
+    background-color: #c9e6c1;
   }
 
   .editor-textarea {
