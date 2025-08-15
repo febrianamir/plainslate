@@ -1,26 +1,27 @@
 <script>
+  import { debounce } from '../../../lib/utils'
   import { SearchInFiles } from '../../../../wailsjs/go/usecase/Usecase.js'
   import SearchResultItem from './SearchResultItem.svelte'
 
   let query = $state('')
   let results = $state([])
-  let searchDebounceTimer
+
+  const debouncedSearchInFiles = debounce(async () => {
+    if (query.trim()) {
+      try {
+        const result = await SearchInFiles(query)
+        sortSearchResultFiles(result)
+        results = result
+      } catch (err) {
+        console.log('Error search in files:', err)
+      }
+    } else {
+      results = []
+    }
+  }, 200)
 
   function handleInput() {
-    clearTimeout(searchDebounceTimer)
-    searchDebounceTimer = setTimeout(async () => {
-      if (query.trim()) {
-        try {
-          const result = await SearchInFiles(query)
-          sortSearchResultFiles(result)
-          results = result
-        } catch (err) {
-          console.log('Error search in files:', err)
-        }
-      } else {
-        results = []
-      }
-    }, 200) // Debounce delay
+    debouncedSearchInFiles()
   }
 
   function sortSearchResultFiles(results) {
