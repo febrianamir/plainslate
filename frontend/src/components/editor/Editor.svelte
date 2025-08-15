@@ -1,4 +1,5 @@
 <script>
+  import { debounce } from '../../lib/utils'
   import { OpenOrCreateFile, SaveFile } from '../../../wailsjs/go/usecase/Usecase.js'
   import { getOpenedFiles, getActiveFile } from '../../state/openedFile.svelte'
   import { onMount, onDestroy } from 'svelte'
@@ -17,9 +18,12 @@
     }
   })
 
-  function handleInput(e) {
-    activeFile.fileContent = e.target.value
+  const debouncedMarkUnsaved = debounce(() => {
     activeFile.hasUnsavedChanges = activeFile.fileContent !== activeFile.savedFileContent
+  }, 200)
+
+  function handleInput(e) {
+    debouncedMarkUnsaved()
   }
 
   async function saveFile() {
