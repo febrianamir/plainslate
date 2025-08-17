@@ -1,7 +1,7 @@
 <script>
   import TreeNode from './TreeNode.svelte'
   import ContextMenu from './ContextMenu.svelte'
-  import { openedFilesClose } from '../../../state/openedFile.svelte'
+  import { openedFilesClose } from '../../../state/openedFile.svelte.js'
   import { GetNodeTree, MoveToTrash } from '../../../../wailsjs/go/usecase/Usecase.js'
   import { rootPath } from '../../../stores/global.js'
   import { onMount, onDestroy } from 'svelte'

@@ -1,5 +1,5 @@
 <script>
-  import { debounce } from '../../../lib/utils'
+  import { debounce } from '../../../lib/utils.js'
   import { SearchInFiles } from '../../../../wailsjs/go/usecase/Usecase.js'
   import SearchResultItem from './SearchResultItem.svelte'
 

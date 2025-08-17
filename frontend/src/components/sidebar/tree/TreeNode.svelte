@@ -1,10 +1,10 @@
 <script>
   import { Folder, FolderOpen, File } from 'lucide-svelte'
   import TreeNode from './TreeNode.svelte'
-  import { openedFilesUpdateFile, getOpenedFiles } from '../../../state/openedFile.svelte'
+  import { openedFilesUpdateFile, getOpenedFiles } from '../../../state/openedFile.svelte.js'
   import { onMount, onDestroy, tick } from 'svelte'
   import { CreateDirectory, RenamePath, SaveFile } from '../../../../wailsjs/go/usecase/Usecase.js'
-  import { openFile } from '../../../lib/services/fileService'
+  import { openFile } from '../../../lib/services/fileService.js'
   import { handleEnter } from '../../../../src/lib/utils.js'
 
   let openedFiles = getOpenedFiles()

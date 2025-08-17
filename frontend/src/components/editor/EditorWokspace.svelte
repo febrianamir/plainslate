@@ -1,5 +1,5 @@
 <script>
-  import { getOpenedFiles } from '../../state/openedFile.svelte'
+  import { getOpenedFiles } from '../../state/openedFile.svelte.js'
   import Editor from './Editor.svelte'
 
   let openedFiles = getOpenedFiles()

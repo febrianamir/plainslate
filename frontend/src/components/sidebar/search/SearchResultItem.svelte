@@ -1,8 +1,8 @@
 <script>
   import { ChevronDown, ChevronRight } from 'lucide-svelte'
-  import { handleEnter } from '../../../../src/lib/utils'
+  import { handleEnter } from '../../../../src/lib/utils.js'
   import { onDestroy, onMount } from 'svelte'
-  import { openFile } from '../../../lib/services/fileService'
+  import { openFile } from '../../../lib/services/fileService.js'
 
   let { filename, path, fileMatches, query } = $props()
 

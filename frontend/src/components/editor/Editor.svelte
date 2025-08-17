@@ -1,10 +1,14 @@
 <script>
-  import { debounce } from '../../lib/utils'
+  import { debounce } from '../../lib/utils.js'
   import { OpenOrCreateFile, SaveFile } from '../../../wailsjs/go/usecase/Usecase.js'
-  import { getOpenedFiles, getActiveFile, openedFilesSelect } from '../../state/openedFile.svelte'
+  import {
+    getOpenedFiles,
+    getActiveFile,
+    openedFilesSelect,
+  } from '../../state/openedFile.svelte.js'
   import { onMount, onDestroy } from 'svelte'
   import { X } from 'lucide-svelte'
-  import { closeFile } from '../../lib/services/fileService'
+  import { closeFile } from '../../lib/services/fileService.js'
 
   let openedFiles = getOpenedFiles()
   let rows = 35
