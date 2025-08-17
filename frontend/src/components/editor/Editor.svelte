@@ -3,6 +3,8 @@
   import { OpenOrCreateFile, SaveFile } from '../../../wailsjs/go/usecase/Usecase.js'
   import { getOpenedFiles, getActiveFile, openedFilesSelect } from '../../state/openedFile.svelte'
   import { onMount, onDestroy } from 'svelte'
+  import { X } from 'lucide-svelte'
+  import { closeFile } from '../../lib/services/fileService'
 
   let openedFiles = getOpenedFiles()
   let rows = 35
@@ -41,7 +43,6 @@
   }
 
   function switchActiveFile(fileId) {
-    console.log(fileId)
     openedFilesSelect(fileId)
   }
 
@@ -78,7 +79,26 @@
         <div class="editor-tab-text">
           {file.filename}
         </div>
-        <div class="editor-tab-indicator" class:active={file.hasUnsavedChanges}></div>
+        <div class="editor-tab-actions">
+          <div class="editor-tab-indicator" class:active={file.hasUnsavedChanges}></div>
+          <div
+            role="button"
+            tabindex="0"
+            class="editor-tab-close"
+            onclick={(e) => {
+              e.stopPropagation()
+              closeFile(file.id)
+            }}
+            onkeydown={(e) => {
+              handleEnter(e, () => {
+                e.stopPropagation()
+                closeFile(file.id)
+              })
+            }}
+          >
+            <X size={15} />
+          </div>
+        </div>
       </div>
     {/each}
   </div>
@@ -128,6 +148,15 @@
     border-radius: 1px;
   }
 
+  .editor-tab-actions {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 15px;
+    height: 15px;
+  }
+
   .editor-tab-indicator {
     margin-top: 1px;
     width: 5px;
@@ -137,6 +166,30 @@
 
   .editor-tab-indicator.active {
     background-color: #c9e6c1;
+  }
+
+  .editor-tab-actions:hover .editor-tab-indicator {
+    opacity: 0;
+  }
+
+  .editor-tab-close {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    background-color: #1e1e1e;
+    color: #9d9d9d;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .editor-tab-actions:hover .editor-tab-close {
+    opacity: 1;
   }
 
   .editor-textarea {

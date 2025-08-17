@@ -2,6 +2,7 @@ import {
   openedFilesOpen,
   openedFilesCheckExist,
   openedFilesSelect,
+  openedFilesClose,
 } from '../../state/openedFile.svelte'
 import { OpenOrCreateFile } from '../../../wailsjs/go/usecase/Usecase'
 
@@ -27,4 +28,16 @@ export async function openFile(filepath) {
   } catch (err) {
     console.error('Error open file:', err)
   }
+}
+
+export function closeFile(filepath) {
+  if (!filepath || filepath.trim() === '') {
+    return
+  }
+
+  if (!openedFilesCheckExist(filepath)) {
+    return
+  }
+
+  openedFilesClose(filepath)
 }
