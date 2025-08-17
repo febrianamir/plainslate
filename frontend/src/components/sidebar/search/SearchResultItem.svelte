@@ -2,6 +2,7 @@
   import { ChevronDown, ChevronRight } from 'lucide-svelte'
   import { handleEnter } from '../../../../src/lib/utils'
   import { onDestroy, onMount } from 'svelte'
+  import { openFile } from '../../../lib/services/fileService'
 
   let { filename, path, fileMatches, query } = $props()
 
@@ -112,7 +113,15 @@
   </div>
   <div class:active={isExpanded} class="search-result-matches">
     {#each fileMatches as match}
-      <div class="search-result-match">
+      <div
+        role="button"
+        tabindex="0"
+        class="search-result-match"
+        onclick={() => openFile(path)}
+        onkeydown={(e) => {
+          handleEnter(e, () => openFile(path))
+        }}
+      >
         {#each highlightMatch(match, query) as part}
           {#if part.match}
             <span class="search-result-highlight">{part.text}</span>

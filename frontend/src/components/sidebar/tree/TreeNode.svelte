@@ -2,19 +2,10 @@
   import { Folder, FolderOpen, File } from 'lucide-svelte'
   import TreeNode from './TreeNode.svelte'
   import { openedFile } from '../../../stores/global.js'
-  import {
-    openedFilesOpen,
-    openedFilesUpdateFile,
-    openedFilesCheckExist,
-    openedFilesSelect,
-  } from '../../../state/openedFile.svelte'
+  import { openedFilesUpdateFile } from '../../../state/openedFile.svelte'
   import { onMount, onDestroy, tick } from 'svelte'
-  import {
-    CreateDirectory,
-    RenamePath,
-    OpenOrCreateFile,
-    SaveFile,
-  } from '../../../../wailsjs/go/usecase/Usecase.js'
+  import { CreateDirectory, RenamePath, SaveFile } from '../../../../wailsjs/go/usecase/Usecase.js'
+  import { openFile } from '../../../lib/services/fileService'
   import { handleEnter } from '../../../../src/lib/utils.js'
 
   let {
@@ -54,35 +45,12 @@
       toggleExpandFolder()
     }
     if (node.type === 'file' && node.state === 'view') {
-      openFile()
+      openFile(node.path)
     }
   }
 
   function toggleExpandFolder() {
     node.expanded = !node.expanded
-  }
-
-  async function openFile() {
-    let filePath = node.path
-    if (filePath && filePath.trim() !== '') {
-      if (openedFilesCheckExist(filePath)) {
-        return openedFilesSelect(filePath)
-      }
-
-      try {
-        const result = await OpenOrCreateFile(filePath)
-        openedFilesOpen({
-          id: filePath,
-          filepath: filePath,
-          filename: filePath.split('/').pop(),
-          fileContent: result,
-          savedFileContent: result,
-          hasUnsavedChanges: false,
-        })
-      } catch (err) {
-        console.error('Error open file:', err)
-      }
-    }
   }
 
   function createFile() {
@@ -204,7 +172,7 @@
         return
       }
 
-      handleEnter(e, openFile)
+      handleEnter(e, () => openFile(node.path))
     }}
   >
     <div class="node-icon">
