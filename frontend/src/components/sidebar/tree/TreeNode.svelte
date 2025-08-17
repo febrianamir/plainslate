@@ -25,6 +25,8 @@
   $effect(() => {
     if (openedFiles.activeId) {
       nodeActive = openedFiles.activeId === node.path
+    } else {
+      nodeActive = false
     }
   })
 
