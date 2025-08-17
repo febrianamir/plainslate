@@ -1,12 +1,13 @@
 <script>
   import { Folder, FolderOpen, File } from 'lucide-svelte'
   import TreeNode from './TreeNode.svelte'
-  import { openedFile } from '../../../stores/global.js'
-  import { openedFilesUpdateFile } from '../../../state/openedFile.svelte'
+  import { openedFilesUpdateFile, getOpenedFiles } from '../../../state/openedFile.svelte'
   import { onMount, onDestroy, tick } from 'svelte'
   import { CreateDirectory, RenamePath, SaveFile } from '../../../../wailsjs/go/usecase/Usecase.js'
   import { openFile } from '../../../lib/services/fileService'
   import { handleEnter } from '../../../../src/lib/utils.js'
+
+  let openedFiles = getOpenedFiles()
 
   let {
     parentMap,
@@ -22,7 +23,9 @@
 
   let nodeActive = $state(false)
   $effect(() => {
-    nodeActive = $openedFile === node.path
+    if (openedFiles.activeId) {
+      nodeActive = openedFiles.activeId === node.path
+    }
   })
 
   let inputRef = $state()
