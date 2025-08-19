@@ -9,6 +9,7 @@
   import { onMount, onDestroy } from 'svelte'
   import { X } from 'lucide-svelte'
   import { closeFile } from '../../lib/services/fileService.js'
+  import CodeMirrorEditor from './CodeMirrorEditor.svelte'
 
   let openedFiles = getOpenedFiles()
   let rows = 35
@@ -106,14 +107,23 @@
       </div>
     {/each}
   </div>
-  <textarea
+  <!-- <textarea
     class="editor-textarea"
     bind:value={activeFile.fileContent}
     rows={rows}
     cols={cols}
     placeholder={placeholder}
     oninput={handleInput}
-  ></textarea>
+  ></textarea> -->
+  <CodeMirrorEditor
+    value={activeFile.fileContent || ''}
+    placeholder={placeholder}
+    onSave={saveFile}
+    onChange={(newValue) => {
+      activeFile.fileContent = newValue
+      handleInput()
+    }}
+  />
 </div>
 
 <style>
