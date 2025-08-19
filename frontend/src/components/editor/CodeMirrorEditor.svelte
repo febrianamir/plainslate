@@ -26,6 +26,27 @@
           codeLanguages: languages,
         }),
         oneDark,
+        EditorView.theme({
+          '.cm-scroller': {
+            '&::-webkit-scrollbar': {
+              width: '8px',
+              height: '8px',
+            },
+            '&::-webkit-scrollbar-track': {
+              background: 'transparent',
+            },
+            '&::-webkit-scrollbar-corner': {
+              background: 'transparent',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              borderRadius: '4px',
+            },
+            '&::-webkit-scrollbar-thumb:hover': {
+              backgroundColor: 'rgba(255, 255, 255, 0.3)',
+            },
+          },
+        }),
         keymap.of([
           {
             key: 'Ctrl-s',
