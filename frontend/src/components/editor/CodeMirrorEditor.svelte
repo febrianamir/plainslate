@@ -76,9 +76,9 @@
     height: 100%;
   }
 
-  :global(.cm-scroller) {
+  :global(.cm-content) {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
 
   :global(.cm-focused) {
