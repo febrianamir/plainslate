@@ -5,7 +5,6 @@
   import { oneDark } from '@codemirror/theme-one-dark'
   import { keymap } from '@codemirror/view'
 
-  // Props
   let {
     value = '',
     placeholder = 'Write your markdown here...',

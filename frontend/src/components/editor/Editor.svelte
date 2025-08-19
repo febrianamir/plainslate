@@ -107,14 +107,6 @@
       </div>
     {/each}
   </div>
-  <!-- <textarea
-    class="editor-textarea"
-    bind:value={activeFile.fileContent}
-    rows={rows}
-    cols={cols}
-    placeholder={placeholder}
-    oninput={handleInput}
-  ></textarea> -->
   <CodeMirrorEditor
     value={activeFile.fileContent || ''}
     placeholder={placeholder}
@@ -204,21 +196,5 @@
 
   .editor-tab-actions:hover .editor-tab-close {
     opacity: 1;
-  }
-
-  .editor-textarea {
-    all: unset; /* Resets most browser default styles */
-    flex: 1;
-    overflow: auto;
-    resize: none;
-    font-size: 0.85rem;
-    font-family: 'JetBrains Mono', monospace;
-    white-space: pre-wrap; /* Preserve newlines */
-    overflow-wrap: break-word;
-    padding: 2rem;
-    background: #282828;
-    color: #cccccc;
-    outline: none;
-    box-shadow: none;
   }
 </style>
