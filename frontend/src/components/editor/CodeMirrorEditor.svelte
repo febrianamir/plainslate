@@ -4,6 +4,7 @@
   import { markdown } from '@codemirror/lang-markdown'
   import { oneDark } from '@codemirror/theme-one-dark'
   import { keymap } from '@codemirror/view'
+  import { languages } from '@codemirror/language-data'
 
   let {
     value = '',
@@ -21,7 +22,9 @@
       doc: value,
       extensions: [
         basicSetup,
-        markdown(),
+        markdown({
+          codeLanguages: languages,
+        }),
         oneDark,
         keymap.of([
           {
