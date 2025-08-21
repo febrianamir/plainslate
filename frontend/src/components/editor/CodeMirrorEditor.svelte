@@ -128,6 +128,10 @@
     height: 100%;
   }
 
+  :global(.cm-scroller) {
+    padding-bottom: 7rem;
+  }
+
   :global(.cm-content) {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.85rem;
