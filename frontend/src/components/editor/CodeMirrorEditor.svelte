@@ -6,6 +6,7 @@
   import { keymap } from '@codemirror/view'
   import { languages } from '@codemirror/language-data'
   import { StateEffect } from '@codemirror/state'
+  import { foldAll, unfoldAll } from '@codemirror/language'
 
   let {
     value = '',
@@ -60,8 +61,23 @@
         {
           key: 'Alt-z', // Toggle line wrap
           run: (view) => {
-            console.log('wrapped')
             isLineWrapActive = !isLineWrapActive
+            return true
+          },
+        },
+        {
+          key: 'Ctrl-Shift-[',
+          mac: 'Cmd-Alt-[',
+          run: (view) => {
+            foldAll(view)
+            return true
+          },
+        },
+        {
+          key: 'Ctrl-Shift-]',
+          mac: 'Cmd-Alt-]',
+          run: (view) => {
+            unfoldAll(view)
             return true
           },
         },
