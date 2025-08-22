@@ -63,7 +63,7 @@
     node.path = dirPath + '/' + node.name
     node.state = 'view'
 
-    openFile()
+    openFile(node.path)
     if (node.parent) {
       let parentNode = node.parent
       delete node.parent
