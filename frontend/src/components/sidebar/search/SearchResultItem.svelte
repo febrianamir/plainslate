@@ -156,6 +156,10 @@
   }
 
   .search-result-filename {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     flex: 1;
   }
 
@@ -163,8 +167,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 18px;
-    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
     font-weight: 400;
     font-size: 0.65rem;
     border-radius: 20px;
