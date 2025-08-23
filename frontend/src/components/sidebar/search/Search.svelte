@@ -1,17 +1,23 @@
 <script>
   import { debounce } from '../../../lib/utils.js'
   import { SearchInFiles } from '../../../../wailsjs/go/usecase/Usecase.js'
+  import { CaseSensitive } from 'lucide-svelte'
   import SearchResultItem from './SearchResultItem.svelte'
 
   let query = $state('')
+  let isCaseSensitive = $state(false)
   let results = $state([])
 
-  const debouncedSearchInFiles = debounce(async () => {
+  const debouncedSearchInFiles = debounce(async (query, isCaseSensitive) => {
     if (query.trim()) {
       try {
-        const result = await SearchInFiles(query)
-        sortSearchResultFiles(result)
-        results = result
+        const req = {
+          query: query,
+          is_case_sensitive: isCaseSensitive,
+        }
+        const resp = await SearchInFiles(req)
+        sortSearchResultFiles(resp)
+        results = resp
       } catch (err) {
         console.log('Error search in files:', err)
       }
@@ -20,9 +26,13 @@
     }
   }, 200)
 
-  function handleInput() {
-    debouncedSearchInFiles()
+  function toggleCaseSensitive() {
+    isCaseSensitive = !isCaseSensitive
   }
+
+  $effect(() => {
+    debouncedSearchInFiles(query, isCaseSensitive)
+  })
 
   function sortSearchResultFiles(results) {
     // Sort: alphabetically by name
@@ -36,12 +46,19 @@
 
 <div class="search">
   <div class="search-bar">
-    <input
-      class="search-input"
-      bind:value={query}
-      oninput={handleInput}
-      placeholder="Search in folder..."
-    />
+    <input class="search-input" bind:value={query} placeholder="Search in folder..." />
+    <div
+      role="button"
+      tabindex="0"
+      class:active={isCaseSensitive}
+      class="search-case-sensitive"
+      onclick={toggleCaseSensitive}
+      onkeydown={(e) => {
+        handleEnter(e, toggleCaseSensitive)
+      }}
+    >
+      <CaseSensitive size={24} strokeWidth={1.75} />
+    </div>
   </div>
 
   <div class="search-result">
@@ -51,6 +68,7 @@
         fileMatches={file.matches}
         query={query}
         path={file.file_path}
+        isCaseSensitive={isCaseSensitive}
       />
     {/each}
   </div>
@@ -65,6 +83,7 @@
   }
 
   .search-bar {
+    position: relative;
     padding-right: 0.75rem;
   }
 
@@ -79,6 +98,19 @@
     text-overflow: ellipsis;
     overflow: hidden;
     border-radius: 15px;
+  }
+
+  .search-case-sensitive {
+    position: absolute;
+    top: 0;
+    right: 0.75rem;
+    padding: 0.35rem 0.5rem;
+    cursor: pointer;
+  }
+
+  .search-case-sensitive:hover,
+  .search-case-sensitive.active {
+    color: #c9e6c1;
   }
 
   .search-result {

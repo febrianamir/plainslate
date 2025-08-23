@@ -1,3 +1,22 @@
+export namespace dto {
+	
+	export class SearchInFilesReq {
+	    query: string;
+	    is_case_sensitive: boolean;
+	
+	    static createFrom(source: any = {}) {
+	        return new SearchInFilesReq(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.query = source["query"];
+	        this.is_case_sensitive = source["is_case_sensitive"];
+	    }
+	}
+
+}
+
 export namespace lib {
 	
 	export class Config {

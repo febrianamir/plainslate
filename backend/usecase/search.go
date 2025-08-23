@@ -7,13 +7,14 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"plainslate/backend/dto"
 	"plainslate/backend/model"
 	"slices"
 	"strings"
 	"sync"
 )
 
-func (u *Usecase) SearchInFiles(query string) ([]model.Match, error) {
+func (u *Usecase) SearchInFiles(req dto.SearchInFilesReq) ([]model.Match, error) {
 	// Cancel any ongoing search
 	u.Searcher.Mu.Lock()
 	if u.Searcher.Cancel != nil {
@@ -60,7 +61,11 @@ func (u *Usecase) SearchInFiles(query string) ([]model.Match, error) {
 				default:
 				}
 				line := scanner.Text()
-				if strings.Contains(strings.ToLower(line), strings.ToLower(query)) {
+				isMatch := strings.Contains(strings.ToLower(line), strings.ToLower(req.Query))
+				if req.IsCaseSensitive {
+					isMatch = strings.Contains(line, req.Query)
+				}
+				if isMatch {
 					matches = append(matches, line)
 				}
 			}

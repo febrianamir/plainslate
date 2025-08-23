@@ -4,7 +4,7 @@
   import { onDestroy, onMount } from 'svelte'
   import { openFile } from '../../../lib/services/fileService.js'
 
-  let { filename, path, fileMatches, query } = $props()
+  let { filename, path, fileMatches, query, isCaseSensitive } = $props()
 
   let clientX = 0
   let clientY = 0
@@ -38,7 +38,11 @@
   function highlightMatch(line, query) {
     if (!query) return [{ text: line, match: false }]
 
-    const regex = new RegExp(`(${escapeRegExp(query)})`, 'gi')
+    let regexFlag = 'gi'
+    if (isCaseSensitive) {
+      regexFlag = 'g'
+    }
+    const regex = new RegExp(`(${escapeRegExp(query)})`, regexFlag)
     let parts = []
     let lastIndex = 0
     let match
