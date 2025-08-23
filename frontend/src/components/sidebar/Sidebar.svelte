@@ -6,6 +6,7 @@
   import { onDestroy, onMount } from 'svelte'
   import { handleEnter } from '../../../src/lib/utils.js'
 
+  let isShowSidebar = $state(true)
   let sidebarWidth = $state(250)
   let isSidebarResizing = $state(false)
   let activeTab = $state('explorer')
@@ -21,6 +22,10 @@
     }
   }
 
+  function toggleSideba() {
+    isShowSidebar = !isShowSidebar
+  }
+
   function handleActiveTab(tabName) {
     activeTab = tabName
   }
@@ -29,18 +34,27 @@
     isSidebarResizing = false
   }
 
+  function onKeyDown(e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+      e.preventDefault()
+      toggleSideba()
+    }
+  }
+
   onMount(() => {
     window.addEventListener('mousemove', onMouseMove)
     window.addEventListener('mouseup', stopResize)
+    window.addEventListener('keydown', onKeyDown)
   })
 
   onDestroy(() => {
     window.removeEventListener('mousemove', onMouseMove)
     window.removeEventListener('mouseup', stopResize)
+    window.removeEventListener('keydown', onKeyDown)
   })
 </script>
 
-<div class="sidebar">
+<div class:active={isShowSidebar} class="sidebar">
   <div class="sidebar-content" style="width: {sidebarWidth}px">
     <p class="sidebar-appname">PlainSlate</p>
     <SetRootPath />
@@ -97,10 +111,14 @@
 <style>
   .sidebar {
     overflow: hidden;
-    display: flex;
+    display: none;
     height: 100%;
     background-color: #1e1e1e;
     color: #9d9d9d;
+  }
+
+  .sidebar.active {
+    display: flex;
   }
 
   .sidebar-content {
