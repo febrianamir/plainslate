@@ -234,6 +234,7 @@
     min-height: 0;
     overflow-x: hidden;
     overflow-y: scroll;
+    padding-bottom: 14rem;
   }
 
   .directory-tree::-webkit-scrollbar {
