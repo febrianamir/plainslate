@@ -152,7 +152,7 @@
 
     <!-- Preview panel -->
     <div class="preview-panel" class:active={isShowPreview}>
-      <MarkdownPreview content={activeFile.fileContent || ''} className="editor-preview" />
+      <MarkdownPreview fileContent={activeFile.fileContent || ''} className="editor-preview" />
     </div>
   </div>
 </div>

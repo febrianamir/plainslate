@@ -1,33 +1,35 @@
 <script>
-  import { marked } from 'marked'
+  import { Marked } from 'marked'
   import { markedHighlight } from 'marked-highlight'
   import hljs from 'highlight.js'
   import 'highlight.js/styles/atom-one-dark.css'
 
-  let { content = '', className = '' } = $props()
+  let { fileContent = '', className = '' } = $props()
 
-  // Configure marked with syntax highlighting
-  marked.use(
-    markedHighlight({
-      langPrefix: 'hljs language-',
-      highlight(code, lang) {
-        const language = hljs.getLanguage(lang) ? lang : 'plaintext'
-        return hljs.highlight(code, { language }).value
-      },
+  function parseMarkdown(content) {
+    const markedInstance = new Marked()
+
+    markedInstance.use(
+      markedHighlight({
+        langPrefix: 'hljs language-',
+        highlight(code, lang) {
+          const language = hljs.getLanguage(lang) ? lang : 'plaintext'
+          return hljs.highlight(code, { language }).value
+        },
+      })
+    )
+    markedInstance.setOptions({
+      breaks: true, // Convert \n to <br>
+      gfm: true, // GitHub Flavored Markdown
+      headerIds: true,
+      mangle: false,
+      sanitize: false,
     })
-  )
 
-  // Configure marked options
-  marked.setOptions({
-    breaks: true, // Convert \n to <br>
-    gfm: true, // GitHub Flavored Markdown
-    headerIds: true,
-    mangle: false,
-    sanitize: false,
-  })
+    return markedInstance.parse(content)
+  }
 
-  // Convert markdown to HTML
-  let htmlContent = $derived(marked.parse(content || ''))
+  let htmlContent = $derived(parseMarkdown(fileContent || ''))
 </script>
 
 <div class="markdown-preview {className}">
