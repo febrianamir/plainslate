@@ -138,6 +138,7 @@
   .codemirror-wrapper {
     flex: 1;
     overflow: auto;
+    height: 100%;
   }
 
   :global(.cm-editor) {
