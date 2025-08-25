@@ -22,7 +22,7 @@
     }
   }
 
-  function toggleSideba() {
+  function toggleSidebar() {
     isShowSidebar = !isShowSidebar
   }
 
@@ -37,7 +37,7 @@
   function onKeyDown(e) {
     if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
       e.preventDefault()
-      toggleSideba()
+      toggleSidebar()
     }
   }
 
