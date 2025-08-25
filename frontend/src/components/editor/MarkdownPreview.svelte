@@ -52,9 +52,14 @@
   /* Scrollbar styling */
   .markdown-preview::-webkit-scrollbar {
     width: 8px;
+    height: 8px;
   }
 
   .markdown-preview::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .markdown-preview::-webkit-scrollbar-corner {
     background: transparent;
   }
 
