@@ -120,16 +120,41 @@
     background: #282828;
     border: 1px solid #404040;
     border-radius: 6px;
-    padding: 1rem;
     margin: 1rem 0;
     overflow-x: auto;
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.85rem;
   }
 
-  :global(.markdown-preview code) {
+  :global(.markdown-preview pre::-webkit-scrollbar) {
+    width: 8px;
+    height: 8px;
+  }
+
+  :global(.markdown-preview pre::-webkit-scrollbar-track) {
+    background: transparent;
+  }
+
+  :global(.markdown-preview pre::-webkit-scrollbar-corner) {
+    background: transparent;
+  }
+
+  :global(.markdown-preview pre::-webkit-scrollbar-thumb) {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+  }
+
+  :global(.markdown-preview pre::-webkit-scrollbar-thumb:hover) {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+
+  :global(.markdown-preview pre code) {
+    min-width: 100%;
+    width: max-content;
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.85rem;
+    white-space: pre;
+    padding: 1.25rem;
   }
 
   :global(.markdown-preview p code) {
@@ -141,7 +166,6 @@
 
   :global(.markdown-preview pre code.hljs) {
     background: transparent !important;
-    padding: 0;
   }
 
   /* Lists */
