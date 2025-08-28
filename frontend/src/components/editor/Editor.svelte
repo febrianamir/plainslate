@@ -126,7 +126,7 @@
         class="control-btn"
         class:active={isShowPreview}
         onclick={togglePreview}
-        title="Toggle Preview (Ctrl+Shift+P)"
+        title="Toggle Preview (Ctrl+Alt+P)"
       >
         {#if isShowPreview}
           <EyeOff size={16} />
