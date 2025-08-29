@@ -16,13 +16,16 @@ export async function openFile(filepath) {
   }
 
   try {
-    const result = await OpenOrCreateFile(filepath)
+    const req = {
+      filePath: filepath,
+    }
+    const resp = await OpenOrCreateFile(req)
     openedFilesOpen({
       id: filepath,
       filepath: filepath,
       filename: filepath.split('/').pop(),
-      fileContent: result,
-      savedFileContent: result,
+      fileContent: resp,
+      savedFileContent: resp,
       hasUnsavedChanges: false,
     })
   } catch (err) {

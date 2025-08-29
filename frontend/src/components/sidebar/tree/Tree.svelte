@@ -140,7 +140,10 @@
 
     let moveToTrashNode = contextMenuTargetNode
     try {
-      await MoveToTrash(moveToTrashNode.path)
+      const req = {
+        path: moveToTrashNode.path,
+      }
+      await MoveToTrash(req)
       openedFilesClose(moveToTrashNode.path)
       removeNode(moveToTrashNode)
       indexTreeParents()

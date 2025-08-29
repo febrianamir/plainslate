@@ -14,6 +14,9 @@
     errorMessage = ''
     successMessage = ''
     try {
+      const req = {
+        rootPath: path,
+      }
       await SetRootPath(path)
       successMessage = 'Directory saved!'
       rootPath.set(path)

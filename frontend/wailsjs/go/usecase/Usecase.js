@@ -22,12 +22,12 @@ export function OpenOrCreateFile(arg1) {
   return window['go']['usecase']['Usecase']['OpenOrCreateFile'](arg1);
 }
 
-export function RenamePath(arg1, arg2) {
-  return window['go']['usecase']['Usecase']['RenamePath'](arg1, arg2);
+export function RenamePath(arg1) {
+  return window['go']['usecase']['Usecase']['RenamePath'](arg1);
 }
 
-export function SaveFile(arg1, arg2) {
-  return window['go']['usecase']['Usecase']['SaveFile'](arg1, arg2);
+export function SaveFile(arg1) {
+  return window['go']['usecase']['Usecase']['SaveFile'](arg1);
 }
 
 export function SearchInFiles(arg1) {
@@ -38,6 +38,6 @@ export function SetRootPath(arg1) {
   return window['go']['usecase']['Usecase']['SetRootPath'](arg1);
 }
 
-export function WriteLog(arg1, arg2) {
-  return window['go']['usecase']['Usecase']['WriteLog'](arg1, arg2);
+export function WriteLog(arg1) {
+  return window['go']['usecase']['Usecase']['WriteLog'](arg1);
 }

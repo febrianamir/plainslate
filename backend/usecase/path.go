@@ -5,13 +5,14 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"plainslate/backend/dto"
 	"strconv"
 	"strings"
 	"time"
 )
 
-func (u *Usecase) RenamePath(oldPath, newPath string) error {
-	err := os.Rename(oldPath, newPath)
+func (u *Usecase) RenamePath(req dto.RenamePathReq) error {
+	err := os.Rename(req.OldPath, req.NewPath)
 	if err != nil {
 		return err
 	}
@@ -20,15 +21,15 @@ func (u *Usecase) RenamePath(oldPath, newPath string) error {
 }
 
 // MoveToTrash moves the file at the given path to the trash.
-func (u *Usecase) MoveToTrash(p string) error {
+func (u *Usecase) MoveToTrash(req dto.MoveToTrashReq) error {
 	// Find an open file name.
-	tname := filepath.Base(p)
+	tname := filepath.Base(req.Path)
 	for i := 2; u.exists(tname); i++ {
-		tname = filepath.Base(p) + "." + strconv.Itoa(i)
+		tname = filepath.Base(req.Path) + "." + strconv.Itoa(i)
 	}
 
 	// Write the trashinfo file.
-	abs, err := filepath.Abs(p)
+	abs, err := filepath.Abs(req.Path)
 	if err != nil {
 		return err
 	}
@@ -39,7 +40,7 @@ func (u *Usecase) MoveToTrash(p string) error {
 	}
 
 	// Next, move the file to the trash.
-	return os.Rename(p, u.file2path(tname))
+	return os.Rename(req.Path, u.file2path(tname))
 }
 
 func (u *Usecase) exists(tname string) bool {

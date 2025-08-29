@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"plainslate/backend/dto"
 )
 
 func (u *Usecase) checkBaseDirectory() error {
@@ -45,8 +46,8 @@ func (u *Usecase) saveFile(filepath string, content string) error {
 	return os.WriteFile(filepath, []byte(content), 0644)
 }
 
-func (u *Usecase) OpenOrCreateFile(filepath string) (string, error) {
-	file, err := u.openOrCreateFile(filepath)
+func (u *Usecase) OpenOrCreateFile(req dto.OpenOrCreateFileReq) (string, error) {
+	file, err := u.openOrCreateFile(req.FilePath)
 	if err != nil {
 		return "", err
 	}
@@ -60,6 +61,6 @@ func (u *Usecase) OpenOrCreateFile(filepath string) (string, error) {
 	return content, err
 }
 
-func (u *Usecase) SaveFile(filepath string, content string) error {
-	return u.saveFile(filepath, content)
+func (u *Usecase) SaveFile(req dto.SaveFileReq) error {
+	return u.saveFile(req.FilePath, req.Content)
 }

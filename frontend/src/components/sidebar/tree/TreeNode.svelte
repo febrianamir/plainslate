@@ -75,7 +75,10 @@
   async function createFolder() {
     try {
       let dirPath = node.path.substring(0, node.path.lastIndexOf('/')) + '/' + node.name
-      await CreateDirectory(dirPath)
+      const req = {
+        path: dirPath,
+      }
+      await CreateDirectory(req)
       node.path = dirPath
       node.state = 'view'
 
@@ -99,7 +102,11 @@
       let newPath = node.path.substring(0, node.path.lastIndexOf('/')) + '/' + node.name
 
       if (node.oldPath !== newPath) {
-        await RenamePath(node.oldPath, newPath)
+        const req = {
+          oldPath: node.oldPath,
+          newPath: newPath,
+        }
+        await RenamePath(req)
       }
       node.path = newPath
       node.state = 'view'

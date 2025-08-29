@@ -1,6 +1,55 @@
 package dto
 
-type SearchInFilesReq struct {
-	Query           string `json:"query"`
-	IsCaseSensitive bool   `json:"is_case_sensitive"`
-}
+// Config
+type (
+	SetRootPathReq struct {
+		RootPath string `json:"rootPath"`
+	}
+)
+
+// Directory
+type (
+	CreateDirectoryReq struct {
+		Path string `json:"path"`
+	}
+)
+
+// File
+type (
+	OpenOrCreateFileReq struct {
+		FilePath string `json:"filePath"`
+	}
+
+	SaveFileReq struct {
+		FilePath string `json:"filePath"`
+		Content  string `json:"content"`
+	}
+)
+
+// Log
+type (
+	WriteLogReq struct {
+		Level     string         `json:"level"`
+		LogFields map[string]any `json:"logFields"`
+	}
+)
+
+// Path
+type (
+	RenamePathReq struct {
+		OldPath string `json:"oldPath"`
+		NewPath string `json:"newPath"`
+	}
+
+	MoveToTrashReq struct {
+		Path string `json:"path"`
+	}
+)
+
+// Search
+type (
+	SearchInFilesReq struct {
+		Query           string `json:"query"`
+		IsCaseSensitive bool   `json:"isCaseSensitive"`
+	}
+)

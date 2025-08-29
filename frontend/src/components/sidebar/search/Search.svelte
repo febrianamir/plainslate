@@ -13,7 +13,7 @@
       try {
         const req = {
           query: query,
-          is_case_sensitive: isCaseSensitive,
+          isCaseSensitive: isCaseSensitive,
         }
         const resp = await SearchInFiles(req)
         sortSearchResultFiles(resp)

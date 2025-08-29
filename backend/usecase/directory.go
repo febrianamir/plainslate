@@ -1,9 +1,12 @@
 package usecase
 
-import "os"
+import (
+	"os"
+	"plainslate/backend/dto"
+)
 
-func (u *Usecase) CreateDirectory(path string) error {
-	err := os.MkdirAll(path, 0755)
+func (u *Usecase) CreateDirectory(req dto.CreateDirectoryReq) error {
+	err := os.MkdirAll(req.Path, 0755)
 	if err != nil {
 		return err
 	}

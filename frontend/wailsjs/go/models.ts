@@ -1,8 +1,72 @@
 export namespace dto {
 	
+	export class CreateDirectoryReq {
+	    path: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new CreateDirectoryReq(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.path = source["path"];
+	    }
+	}
+	export class MoveToTrashReq {
+	    path: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new MoveToTrashReq(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.path = source["path"];
+	    }
+	}
+	export class OpenOrCreateFileReq {
+	    filePath: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new OpenOrCreateFileReq(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.filePath = source["filePath"];
+	    }
+	}
+	export class RenamePathReq {
+	    oldPath: string;
+	    newPath: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new RenamePathReq(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.oldPath = source["oldPath"];
+	        this.newPath = source["newPath"];
+	    }
+	}
+	export class SaveFileReq {
+	    filePath: string;
+	    content: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new SaveFileReq(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.filePath = source["filePath"];
+	        this.content = source["content"];
+	    }
+	}
 	export class SearchInFilesReq {
 	    query: string;
-	    is_case_sensitive: boolean;
+	    isCaseSensitive: boolean;
 	
 	    static createFrom(source: any = {}) {
 	        return new SearchInFilesReq(source);
@@ -11,7 +75,33 @@ export namespace dto {
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.query = source["query"];
-	        this.is_case_sensitive = source["is_case_sensitive"];
+	        this.isCaseSensitive = source["isCaseSensitive"];
+	    }
+	}
+	export class SetRootPathReq {
+	    rootPath: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new SetRootPathReq(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.rootPath = source["rootPath"];
+	    }
+	}
+	export class WriteLogReq {
+	    level: string;
+	    logFields: Record<string, any>;
+	
+	    static createFrom(source: any = {}) {
+	        return new WriteLogReq(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.level = source["level"];
+	        this.logFields = source["logFields"];
 	    }
 	}
 

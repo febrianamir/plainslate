@@ -44,7 +44,11 @@
     if (activeFile.hasUnsavedChanges) {
       try {
         let saveFilePath = activeFile.filepath
-        await SaveFile(saveFilePath, activeFile.fileContent)
+        const req = {
+          filePath: saveFilePath,
+          content: activeFile.fileContent,
+        }
+        await SaveFile(req)
         activeFile.savedFileContent = activeFile.fileContent
         activeFile.hasUnsavedChanges = false
       } catch (err) {

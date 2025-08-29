@@ -1,16 +1,17 @@
 package usecase
 
 import (
+	"plainslate/backend/dto"
 	"plainslate/backend/lib"
 
 	"go.uber.org/zap"
 )
 
-func (u *Usecase) WriteLog(level string, logFields map[string]any) {
+func (u *Usecase) WriteLog(req dto.WriteLogReq) {
 	var msg string
 	fields := []zap.Field{}
 
-	for key, v := range logFields {
+	for key, v := range req.LogFields {
 		if key == "msg" {
 			msg = v.(string)
 		} else {
@@ -19,5 +20,5 @@ func (u *Usecase) WriteLog(level string, logFields map[string]any) {
 	}
 
 	fields = append(fields, zap.String("component", "frontend"))
-	lib.CommonLog(u.Ctx, level, msg, fields...)
+	lib.CommonLog(u.Ctx, req.Level, msg, fields...)
 }
