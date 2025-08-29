@@ -12,7 +12,7 @@ import (
 type Config struct {
 	UserHomeDir string
 
-	RootPath string `json:"root_path"`
+	RootPath string `json:"rootPath"`
 }
 
 func NewConfig() (*Config, error) {

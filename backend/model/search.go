@@ -1,6 +1,6 @@
 package model
 
 type Match struct {
-	FilePath string   `json:"file_path"`
+	FilePath string   `json:"filePath"`
 	Lines    []string `json:"matches"`
 }

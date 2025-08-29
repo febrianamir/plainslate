@@ -4,7 +4,7 @@
   import { onDestroy, onMount } from 'svelte'
   import { openFile } from '../../../lib/services/fileService.js'
 
-  let { filename, path, fileMatches, query, isCaseSensitive } = $props()
+  let { fileName, path, fileMatches, query, isCaseSensitive } = $props()
 
   let clientX = 0
   let clientY = 0
@@ -109,7 +109,7 @@
       {/if}
     </div>
     <div class="search-result-filename">
-      {filename}
+      {fileName}
     </div>
     <div class="search-result-file-count">
       {fileMatches.length}

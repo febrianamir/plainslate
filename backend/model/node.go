@@ -5,7 +5,7 @@ type Node struct {
 	Path     string  `json:"path"`
 	Type     string  `json:"type"` // Node Types
 	Children []*Node `json:"children,omitempty"`
-	IsRoot   bool    `json:"is_root"`
+	IsRoot   bool    `json:"isRoot"`
 }
 
 // Node Types

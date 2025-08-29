@@ -170,7 +170,7 @@
   }
 
   function addNodeField(node) {
-    node.expanded = node.is_root || false
+    node.expanded = node.isRoot || false
     node.state = 'view'
 
     if (node.children && Array.isArray(node.children)) {

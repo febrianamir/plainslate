@@ -121,8 +121,8 @@
       if (node.oldPath) {
         openedFilesUpdateFile(node.oldPath, {
           id: node.path,
-          filepath: node.path,
-          filename: node.name,
+          filePath: node.path,
+          fileName: node.name,
         })
         delete node.oldPath
       }

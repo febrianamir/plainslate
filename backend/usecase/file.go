@@ -15,35 +15,35 @@ func (u *Usecase) checkBaseDirectory() error {
 	return nil
 }
 
-func (u *Usecase) buildFilePath(filename string) string {
-	return filepath.Join(u.Config.RootPath, filename)
+func (u *Usecase) buildFilePath(fileName string) string {
+	return filepath.Join(u.Config.RootPath, fileName)
 }
 
 // openOrCreateFile open/create file if it doesn't exist.
-func (u *Usecase) openOrCreateFile(filepath string) (*os.File, error) {
+func (u *Usecase) openOrCreateFile(filePath string) (*os.File, error) {
 	err := u.checkBaseDirectory()
 	if err != nil {
 		return nil, err
 	}
 
-	if filepath == "" {
-		return nil, errors.New("filepath is required")
+	if filePath == "" {
+		return nil, errors.New("file path is required")
 	}
 
-	return os.OpenFile(filepath, os.O_RDWR|os.O_CREATE, 0644)
+	return os.OpenFile(filePath, os.O_RDWR|os.O_CREATE, 0644)
 }
 
-func (u *Usecase) saveFile(filepath string, content string) error {
+func (u *Usecase) saveFile(filePath string, content string) error {
 	err := u.checkBaseDirectory()
 	if err != nil {
 		return err
 	}
 
-	if filepath == "" {
-		return errors.New("filepath is required")
+	if filePath == "" {
+		return errors.New("file path is required")
 	}
 
-	return os.WriteFile(filepath, []byte(content), 0644)
+	return os.WriteFile(filePath, []byte(content), 0644)
 }
 
 func (u *Usecase) OpenOrCreateFile(req dto.OpenOrCreateFileReq) (string, error) {

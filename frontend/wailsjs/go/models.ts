@@ -111,7 +111,7 @@ export namespace lib {
 	
 	export class Config {
 	    UserHomeDir: string;
-	    root_path: string;
+	    rootPath: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new Config(source);
@@ -120,7 +120,7 @@ export namespace lib {
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.UserHomeDir = source["UserHomeDir"];
-	        this.root_path = source["root_path"];
+	        this.rootPath = source["rootPath"];
 	    }
 	}
 
@@ -129,7 +129,7 @@ export namespace lib {
 export namespace model {
 	
 	export class Match {
-	    file_path: string;
+	    filePath: string;
 	    matches: string[];
 	
 	    static createFrom(source: any = {}) {
@@ -138,7 +138,7 @@ export namespace model {
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.file_path = source["file_path"];
+	        this.filePath = source["filePath"];
 	        this.matches = source["matches"];
 	    }
 	}
@@ -147,7 +147,7 @@ export namespace model {
 	    path: string;
 	    type: string;
 	    children?: Node[];
-	    is_root: boolean;
+	    isRoot: boolean;
 	
 	    static createFrom(source: any = {}) {
 	        return new Node(source);
@@ -159,7 +159,7 @@ export namespace model {
 	        this.path = source["path"];
 	        this.type = source["type"];
 	        this.children = this.convertValues(source["children"], Node);
-	        this.is_root = source["is_root"];
+	        this.isRoot = source["isRoot"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

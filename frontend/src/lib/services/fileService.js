@@ -6,24 +6,24 @@ import {
 } from '../../state/openedFile.svelte'
 import { OpenOrCreateFile } from '../../../wailsjs/go/usecase/Usecase'
 
-export async function openFile(filepath) {
-  if (!filepath || filepath.trim() === '') {
+export async function openFile(filePath) {
+  if (!filePath || filePath.trim() === '') {
     return
   }
 
-  if (openedFilesCheckExist(filepath)) {
-    return openedFilesSelect(filepath)
+  if (openedFilesCheckExist(filePath)) {
+    return openedFilesSelect(filePath)
   }
 
   try {
     const req = {
-      filePath: filepath,
+      filePath: filePath,
     }
     const resp = await OpenOrCreateFile(req)
     openedFilesOpen({
-      id: filepath,
-      filepath: filepath,
-      filename: filepath.split('/').pop(),
+      id: filePath,
+      filePath: filePath,
+      fileName: filePath.split('/').pop(),
       fileContent: resp,
       savedFileContent: resp,
       hasUnsavedChanges: false,
@@ -33,14 +33,14 @@ export async function openFile(filepath) {
   }
 }
 
-export function closeFile(filepath) {
-  if (!filepath || filepath.trim() === '') {
+export function closeFile(filePath) {
+  if (!filePath || filePath.trim() === '') {
     return
   }
 
-  if (!openedFilesCheckExist(filepath)) {
+  if (!openedFilesCheckExist(filePath)) {
     return
   }
 
-  openedFilesClose(filepath)
+  openedFilesClose(filePath)
 }

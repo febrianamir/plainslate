@@ -37,8 +37,8 @@
   function sortSearchResultFiles(results) {
     // Sort: alphabetically by name
     results.sort((a, b) => {
-      let aFilename = a.file_path.split('/').pop()
-      let bFilename = b.file_path.split('/').pop()
+      let aFilename = a.filePath.split('/').pop()
+      let bFilename = b.filePath.split('/').pop()
       return aFilename.localeCompare(bFilename, undefined, { sensitivity: 'base' })
     })
   }
@@ -64,10 +64,10 @@
   <div class="search-result">
     {#each results as file}
       <SearchResultItem
-        filename={file.file_path.split('/').pop()}
+        fileName={file.filePath.split('/').pop()}
         fileMatches={file.matches}
         query={query}
-        path={file.file_path}
+        path={file.filePath}
         isCaseSensitive={isCaseSensitive}
       />
     {/each}

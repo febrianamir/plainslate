@@ -7,8 +7,8 @@
 
   onMount(async () => {
     const config = await GetConfig()
-    if (config?.root_path !== '') {
-      rootPath.set(config.root_path)
+    if (config?.rootPath !== '') {
+      rootPath.set(config.rootPath)
     }
   })
 </script>

@@ -43,7 +43,7 @@
     // Only save changed files
     if (activeFile.hasUnsavedChanges) {
       try {
-        let saveFilePath = activeFile.filepath
+        let saveFilePath = activeFile.filePath
         const req = {
           filePath: saveFilePath,
           content: activeFile.fileContent,
@@ -99,7 +99,7 @@
           }}
         >
           <div class="editor-tab-text">
-            {file.filename}
+            {file.fileName}
           </div>
           <div class="editor-tab-actions">
             <div class="editor-tab-indicator" class:active={file.hasUnsavedChanges}></div>
