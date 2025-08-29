@@ -38,7 +38,7 @@
 
 <style>
   .markdown-preview {
-    padding: 2rem;
+    padding: 2rem 5rem;
     font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Roboto', sans-serif;
     line-height: 1.6;
     color: #e0e0e0;
