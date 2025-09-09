@@ -43,6 +43,9 @@ export function openedFilesUpdateFile(fileId, updatedData) {
   })
   if (file) {
     Object.assign(file, updatedData)
+    if (fileId == openedFiles.activeId) {
+      openedFiles.activeId = file.id
+    }
   }
 }
 
