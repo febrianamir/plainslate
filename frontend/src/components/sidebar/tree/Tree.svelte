@@ -2,7 +2,8 @@
   import TreeNode from './TreeNode.svelte'
   import ContextMenu from './ContextMenu.svelte'
   import { openedFilesClose } from '../../../state/openedFile.svelte.js'
-  import { GetNodeTree, MoveToTrash } from '../../../../wailsjs/go/usecase/Usecase.js'
+  import { clipboard, cleanClipboard } from '../../../state/clipboard.svelte.js'
+  import { GetNodeTree, MoveToTrash, RenamePath } from '../../../../wailsjs/go/usecase/Usecase.js'
   import { rootPath } from '../../../stores/global.js'
   import { onMount, onDestroy } from 'svelte'
 
@@ -152,6 +153,58 @@
     }
   }
 
+  function addToClipboard(clipboardType) {
+    if (contextMenuTargetNode === null) {
+      return
+    }
+
+    let filename = contextMenuTargetNode.path.split('/').pop()
+
+    clipboard.clipboardType = clipboardType
+    clipboard.path = contextMenuTargetNode.path
+    clipboard.filename = filename
+    clipboard.node = contextMenuTargetNode
+  }
+
+  async function paste() {
+    if (contextMenuTargetNode === null) {
+      return
+    }
+
+    if (clipboard.clipboardType === '') {
+      return
+    }
+
+    let targetFullPath = contextMenuTargetNode.path
+    let parentNode = contextMenuTargetNode
+    if (contextMenuTargetNode.type === 'file') {
+      parentNode = parentMap.get(targetFullPath)
+    }
+    let oldPath = clipboard.path
+    let newPath = parentNode.path + '/' + clipboard.filename
+
+    if (oldPath !== newPath) {
+      const req = {
+        oldPath: oldPath,
+        newPath: newPath,
+      }
+      await RenamePath(req)
+
+      // Move node to new location
+      removeNode(clipboard.node)
+      clipboard.node.path = newPath
+      insertNode(parentNode, clipboard.node)
+
+      // Reorder the new location's parent
+      sortNodeChildren(parentNode)
+
+      // Reindex tree parents
+      indexTreeParents()
+    }
+
+    cleanClipboard()
+  }
+
   function insertNode(targetNode, newNode) {
     if (!targetNode.children) {
       targetNode.children = []
@@ -227,6 +280,8 @@
       showCreateFolderInput={showCreateFolderInput}
       showRenameInput={showRenameInput}
       moveItemToTrash={moveItemToTrash}
+      addToClipboard={addToClipboard}
+      paste={paste}
     />
   {/if}
 </div>

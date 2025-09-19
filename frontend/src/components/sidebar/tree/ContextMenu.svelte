@@ -8,6 +8,8 @@
     showCreateFolderInput = () => {},
     showRenameInput = () => {},
     moveItemToTrash = () => {},
+    addToClipboard = () => {},
+    paste = () => {},
   } = $props()
 </script>
 
@@ -56,6 +58,29 @@
     }}
   >
     Move To Trash
+  </div>
+  <div class="context-separator"></div>
+  <div
+    role="button"
+    tabindex="0"
+    class="context-item"
+    onclick={(e) => addToClipboard('CUT')}
+    onkeydown={(e) => {
+      handleEnter(e, addToClipboard('CUT'))
+    }}
+  >
+    Cut
+  </div>
+  <div
+    role="button"
+    tabindex="0"
+    class="context-item"
+    onclick={(e) => paste()}
+    onkeydown={(e) => {
+      handleEnter(e, paste())
+    }}
+  >
+    Paste
   </div>
 </div>
 
