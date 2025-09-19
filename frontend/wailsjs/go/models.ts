@@ -1,5 +1,19 @@
 export namespace dto {
 	
+	export class CopyFileReq {
+	    sourcePath: string;
+	    destPath: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new CopyFileReq(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.sourcePath = source["sourcePath"];
+	        this.destPath = source["destPath"];
+	    }
+	}
 	export class CreateDirectoryReq {
 	    path: string;
 	

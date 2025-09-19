@@ -3,7 +3,12 @@
   import ContextMenu from './ContextMenu.svelte'
   import { openedFilesClose } from '../../../state/openedFile.svelte.js'
   import { clipboard, cleanClipboard } from '../../../state/clipboard.svelte.js'
-  import { GetNodeTree, MoveToTrash, RenamePath } from '../../../../wailsjs/go/usecase/Usecase.js'
+  import {
+    GetNodeTree,
+    MoveToTrash,
+    RenamePath,
+    CopyFile,
+  } from '../../../../wailsjs/go/usecase/Usecase.js'
   import { rootPath } from '../../../stores/global.js'
   import { onMount, onDestroy } from 'svelte'
 
@@ -176,32 +181,50 @@
     }
 
     let targetFullPath = contextMenuTargetNode.path
-    let parentNode = contextMenuTargetNode
+    let destParentNode = contextMenuTargetNode
     if (contextMenuTargetNode.type === 'file') {
-      parentNode = parentMap.get(targetFullPath)
+      destParentNode = parentMap.get(targetFullPath)
     }
-    let oldPath = clipboard.path
-    let newPath = parentNode.path + '/' + clipboard.filename
+    let sourcePath = clipboard.path
+    let destPath = destParentNode.path + '/' + clipboard.filename
 
-    if (oldPath !== newPath) {
+    if (clipboard.clipboardType === 'CUT' && sourcePath !== destPath) {
       const req = {
-        oldPath: oldPath,
-        newPath: newPath,
+        oldPath: sourcePath,
+        newPath: destPath,
       }
       await RenamePath(req)
 
-      // Move node to new location
+      // Move node to destination path
       removeNode(clipboard.node)
-      clipboard.node.path = newPath
-      insertNode(parentNode, clipboard.node)
+      clipboard.node.path = destPath
+      insertNode(destParentNode, clipboard.node)
 
-      // Reorder the new location's parent
-      sortNodeChildren(parentNode)
+      // Reorder the destination parent
+      sortNodeChildren(destParentNode)
 
       // Reindex tree parents
       indexTreeParents()
     }
 
+    if (clipboard.clipboardType === 'COPY') {
+      const req = {
+        sourcePath: sourcePath,
+        destPath: destPath,
+      }
+      await CopyFile(req)
+
+      // Add new node to destination path
+      insertNode(destParentNode, clipboard.node)
+
+      // Reorder the destination parent
+      sortNodeChildren(destParentNode)
+
+      // Reindex tree parents
+      indexTreeParents()
+    }
+
+    // Clean clipboard
     cleanClipboard()
   }
 

@@ -24,6 +24,11 @@ type (
 		FilePath string `json:"filePath"`
 		Content  string `json:"content"`
 	}
+
+	CopyFileReq struct {
+		SourcePath string `json:"sourcePath"`
+		DestPath   string `json:"destPath"`
+	}
 )
 
 // Log

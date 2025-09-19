@@ -75,6 +75,17 @@
     role="button"
     tabindex="0"
     class="context-item"
+    onclick={(e) => addToClipboard('COPY')}
+    onkeydown={(e) => {
+      handleEnter(e, addToClipboard('COPY'))
+    }}
+  >
+    Copy
+  </div>
+  <div
+    role="button"
+    tabindex="0"
+    class="context-item"
     onclick={(e) => paste()}
     onkeydown={(e) => {
       handleEnter(e, paste())

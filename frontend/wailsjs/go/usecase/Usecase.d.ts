@@ -4,6 +4,8 @@ import {dto} from '../models';
 import {lib} from '../models';
 import {model} from '../models';
 
+export function CopyFile(arg1:dto.CopyFileReq):Promise<void>;
+
 export function CreateDirectory(arg1:dto.CreateDirectoryReq):Promise<void>;
 
 export function GetConfig():Promise<lib.Config>;

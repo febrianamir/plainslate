@@ -61,6 +61,32 @@ func (u *Usecase) OpenOrCreateFile(req dto.OpenOrCreateFileReq) (string, error) 
 	return content, err
 }
 
+func (u *Usecase) CopyFile(req dto.CopyFileReq) error {
+	sourceFile, err := os.Open(req.SourcePath)
+	if err != nil {
+		return err
+	}
+	defer sourceFile.Close()
+
+	destFile, err := os.Create(req.DestPath)
+	if err != nil {
+		return err
+	}
+	defer destFile.Close()
+
+	_, err = io.Copy(destFile, sourceFile)
+	if err != nil {
+		return err
+	}
+
+	// Copy file permissions
+	sourceInfo, err := os.Stat(req.SourcePath)
+	if err != nil {
+		return err
+	}
+	return os.Chmod(req.DestPath, sourceInfo.Mode())
+}
+
 func (u *Usecase) SaveFile(req dto.SaveFileReq) error {
 	return u.saveFile(req.FilePath, req.Content)
 }
