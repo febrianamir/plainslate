@@ -1,5 +1,6 @@
 <script>
   import { handleEnter } from '../../../../src/lib/utils.js'
+  import { clipboard } from '../../../state/clipboard.svelte.js'
 
   let {
     contextMenuX = 0,
@@ -86,6 +87,7 @@
     role="button"
     tabindex="0"
     class="context-item"
+    class:disabled={clipboard.clipboardType === ''}
     onclick={(e) => paste()}
     onkeydown={(e) => {
       handleEnter(e, paste())
@@ -114,6 +116,17 @@
   .context-item:hover {
     color: #282828;
     background-color: #c9e6c1;
+  }
+
+  .context-item.disabled {
+    color: #666;
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .context-item.disabled:hover {
+    color: #666;
+    background-color: transparent;
   }
 
   .context-separator {
