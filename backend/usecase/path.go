@@ -43,6 +43,11 @@ func (u *Usecase) MoveToTrash(req dto.MoveToTrashReq) error {
 	return os.Rename(req.Path, u.file2path(tname))
 }
 
+func (u *Usecase) CheckPath(req dto.CheckPathReq) bool {
+	_, err := os.Stat(req.Path)
+	return !os.IsNotExist(err)
+}
+
 func (u *Usecase) exists(tname string) bool {
 	_, err := os.Stat(u.file2path(tname))
 	return !os.IsNotExist(err)

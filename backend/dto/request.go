@@ -49,6 +49,10 @@ type (
 	MoveToTrashReq struct {
 		Path string `json:"path"`
 	}
+
+	CheckPathReq struct {
+		Path string `json:"path"`
+	}
 )
 
 // Search

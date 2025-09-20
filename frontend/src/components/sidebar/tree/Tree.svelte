@@ -8,9 +8,11 @@
     MoveToTrash,
     RenamePath,
     CopyFile,
+    CheckPath,
   } from '../../../../wailsjs/go/usecase/Usecase.js'
   import { rootPath } from '../../../stores/global.js'
   import { onMount, onDestroy } from 'svelte'
+  import { parseFilepath } from '../../../lib/utils.js'
 
   let unsubRootPath
   let depth = 0
@@ -208,24 +210,58 @@
     }
 
     if (clipboard.clipboardType === 'COPY') {
-      const req = {
-        sourcePath: sourcePath,
-        destPath: destPath,
+      try {
+        let file = parseFilepath(destPath)
+        let safeDestPath = await checkDestPath(destPath, file.name + '.' + file.extension, 0)
+
+        const req = {
+          sourcePath: sourcePath,
+          destPath: safeDestPath,
+        }
+        await CopyFile(req)
+
+        // Add new node to destination path
+        let newFile = parseFilepath(safeDestPath)
+        let newNode = {
+          state: 'view',
+          name: newFile.name + '.' + newFile.extension,
+          path: safeDestPath,
+          type: 'file',
+          children: [],
+        }
+        insertNode(destParentNode, newNode)
+
+        // Reorder the destination parent
+        sortNodeChildren(destParentNode)
+
+        // Reindex tree parents
+        indexTreeParents()
+      } catch (err) {
+        console.error('Error copy to destination:', err)
       }
-      await CopyFile(req)
-
-      // Add new node to destination path
-      insertNode(destParentNode, clipboard.node)
-
-      // Reorder the destination parent
-      sortNodeChildren(destParentNode)
-
-      // Reindex tree parents
-      indexTreeParents()
     }
 
     // Clean clipboard
     cleanClipboard()
+  }
+
+  async function checkDestPath(destPath, originalFilename, iteration) {
+    // Check duplicate file
+    const checkPathReq = {
+      path: destPath,
+    }
+    const isDuplicate = await CheckPath(checkPathReq)
+
+    if (isDuplicate) {
+      // Create new destination path
+      iteration++
+      let file = parseFilepath(destPath)
+      let newDestPath =
+        file.dirpath + originalFilename + ' (' + iteration + ')' + '.' + file.extension
+      newDestPath = await checkDestPath(newDestPath, originalFilename, iteration)
+      return newDestPath
+    }
+    return destPath
   }
 
   function insertNode(targetNode, newNode) {
