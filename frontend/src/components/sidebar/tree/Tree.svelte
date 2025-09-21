@@ -201,8 +201,20 @@
 
       // Move node to destination path
       removeNode(clipboard.node)
-      clipboard.node.path = destPath
-      insertNode(destParentNode, clipboard.node)
+
+      if (clipboard.node.type === 'file') {
+        clipboard.node.path = destPath
+        insertNode(destParentNode, clipboard.node)
+      }
+
+      if (clipboard.node.type === 'directory') {
+        const getNodeTreeReq = {
+          path: destPath,
+        }
+        const result = await GetNodeTree(getNodeTreeReq)
+        let newDirectoryNode = addNodeField(result)
+        insertNode(destParentNode, newDirectoryNode)
+      }
 
       // Reorder the destination parent
       sortNodeChildren(destParentNode)
