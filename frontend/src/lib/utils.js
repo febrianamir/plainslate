@@ -31,3 +31,15 @@ export function parseFilepath(filepath) {
 
   return { dirpath: dirpath, name: filename, extension: extension };
 }
+
+export function getLastDirName(path) {
+  return path.replace(/\/+$/, '').split('/').pop();
+}
+
+export function getParentDirPath(path) {
+  const clean = path.replace(/\/+$/, '');
+  const parts = clean.split('/');
+  const last = parts.pop();
+  const parentDirPath = parts.join('/');
+  return parentDirPath + '/'
+}

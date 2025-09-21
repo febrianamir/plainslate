@@ -6,13 +6,17 @@ import {model} from '../models';
 
 export function CheckPath(arg1:dto.CheckPathReq):Promise<boolean>;
 
+export function CopyDirectory(arg1:dto.CopyDirectoryReq):Promise<void>;
+
 export function CopyFile(arg1:dto.CopyFileReq):Promise<void>;
 
 export function CreateDirectory(arg1:dto.CreateDirectoryReq):Promise<void>;
 
 export function GetConfig():Promise<lib.Config>;
 
-export function GetNodeTree():Promise<model.Node>;
+export function GetNodeTree(arg1:dto.GetNodeTreeReq):Promise<model.Node>;
+
+export function GetRootNodeTree():Promise<model.Node>;
 
 export function MoveToTrash(arg1:dto.MoveToTrashReq):Promise<void>;
 

@@ -12,6 +12,20 @@ export namespace dto {
 	        this.path = source["path"];
 	    }
 	}
+	export class CopyDirectoryReq {
+	    sourcePath: string;
+	    destPath: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new CopyDirectoryReq(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.sourcePath = source["sourcePath"];
+	        this.destPath = source["destPath"];
+	    }
+	}
 	export class CopyFileReq {
 	    sourcePath: string;
 	    destPath: string;
@@ -31,6 +45,18 @@ export namespace dto {
 	
 	    static createFrom(source: any = {}) {
 	        return new CreateDirectoryReq(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.path = source["path"];
+	    }
+	}
+	export class GetNodeTreeReq {
+	    path: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new GetNodeTreeReq(source);
 	    }
 	
 	    constructor(source: any = {}) {

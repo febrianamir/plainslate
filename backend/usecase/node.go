@@ -4,6 +4,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"plainslate/backend/dto"
 	"plainslate/backend/model"
 	"strings"
 )
@@ -77,13 +78,22 @@ func (u *Usecase) insert(parent *model.Node, parts []string, fullPath string, en
 	}
 }
 
-func (u *Usecase) GetNodeTree() (*model.Node, error) {
+func (u *Usecase) GetRootNodeTree() (*model.Node, error) {
 	err := u.checkBaseDirectory()
 	if err != nil {
 		return nil, err
 	}
 
 	nodeTree, err := u.buildTree(u.Config.RootPath)
+	if err != nil {
+		return nil, err
+	}
+
+	return nodeTree, err
+}
+
+func (u *Usecase) GetNodeTree(req dto.GetNodeTreeReq) (*model.Node, error) {
+	nodeTree, err := u.buildTree(req.Path)
 	if err != nil {
 		return nil, err
 	}

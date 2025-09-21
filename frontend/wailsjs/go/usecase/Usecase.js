@@ -6,6 +6,10 @@ export function CheckPath(arg1) {
   return window['go']['usecase']['Usecase']['CheckPath'](arg1);
 }
 
+export function CopyDirectory(arg1) {
+  return window['go']['usecase']['Usecase']['CopyDirectory'](arg1);
+}
+
 export function CopyFile(arg1) {
   return window['go']['usecase']['Usecase']['CopyFile'](arg1);
 }
@@ -18,8 +22,12 @@ export function GetConfig() {
   return window['go']['usecase']['Usecase']['GetConfig']();
 }
 
-export function GetNodeTree() {
-  return window['go']['usecase']['Usecase']['GetNodeTree']();
+export function GetNodeTree(arg1) {
+  return window['go']['usecase']['Usecase']['GetNodeTree'](arg1);
+}
+
+export function GetRootNodeTree() {
+  return window['go']['usecase']['Usecase']['GetRootNodeTree']();
 }
 
 export function MoveToTrash(arg1) {

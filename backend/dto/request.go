@@ -12,6 +12,11 @@ type (
 	CreateDirectoryReq struct {
 		Path string `json:"path"`
 	}
+
+	CopyDirectoryReq struct {
+		SourcePath string `json:"sourcePath"`
+		DestPath   string `json:"destPath"`
+	}
 )
 
 // File
@@ -60,5 +65,12 @@ type (
 	SearchInFilesReq struct {
 		Query           string `json:"query"`
 		IsCaseSensitive bool   `json:"isCaseSensitive"`
+	}
+)
+
+// Node
+type (
+	GetNodeTreeReq struct {
+		Path string `json:"path"`
 	}
 )
