@@ -314,7 +314,7 @@
     if (isDuplicate) {
       // Create new destination path
       iteration++
-      let dirpath = parseFilepath(destPath)
+      let file = parseFilepath(destPath)
       let newDestPath =
         file.dirpath + originalFilename + ' (' + iteration + ')' + '.' + file.extension
       newDestPath = await generateSafeDestFilePath(newDestPath, originalFilename, iteration)
