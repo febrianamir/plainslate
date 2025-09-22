@@ -203,56 +203,12 @@
       removeNode(clipboard.node)
 
       if (clipboard.node.type === 'file') {
-        // Insert new node to destination path
-        clipboard.node.path = destPath
-        insertNode(destParentNode, clipboard.node)
-
-        // Update opened file path
-        if (openedFilesCheckExist(sourcePath)) {
-          openedFilesUpdateFile(sourcePath, {
-            id: destPath,
-            filePath: destPath,
-            fileName: clipboard.filename,
-          })
-        }
+        cutFile(sourcePath, destPath, clipboard.node, destParentNode)
       }
 
       if (clipboard.node.type === 'directory') {
-        try {
-          // Insert new node to destination path
-          const getNodeTreeReq = {
-            path: destPath,
-          }
-          const result = await GetNodeTree(getNodeTreeReq)
-          let newDirectoryNode = addNodeField(result)
-          insertNode(destParentNode, newDirectoryNode)
-
-          // Update opened file path
-          let paths = getNodePaths(clipboard.node)
-          let newPaths = getNodePaths(newDirectoryNode)
-          paths.forEach(function (v, i) {
-            let op = v
-            let np = newPaths[i]
-            let file = parseFilepath(np)
-
-            if (openedFilesCheckExist(op)) {
-              openedFilesUpdateFile(op, {
-                id: np,
-                filePath: np,
-                fileName: file.name + '.' + file.extension,
-              })
-            }
-          })
-        } catch (err) {
-          console.error('Error update tree node after paste:', err)
-        }
+        cutDirectory(sourcePath, destPath, clipboard.node, destParentNode)
       }
-
-      // Reorder the destination parent
-      sortNodeChildren(destParentNode)
-
-      // Reindex tree parents
-      indexTreeParents()
     }
 
     if (clipboard.clipboardType === 'COPY') {
@@ -267,6 +223,64 @@
 
     // Clean clipboard
     cleanClipboard()
+  }
+
+  async function cutFile(sourcePath, destPath, node, destParentNode) {
+    // Insert new node to destination path
+    node.path = destPath
+    insertNode(destParentNode, node)
+
+    // Update opened file path
+    if (openedFilesCheckExist(sourcePath)) {
+      openedFilesUpdateFile(sourcePath, {
+        id: destPath,
+        filePath: destPath,
+        fileName: node.name,
+      })
+    }
+
+    // Reorder the destination parent
+    sortNodeChildren(destParentNode)
+
+    // Reindex tree parents
+    indexTreeParents()
+  }
+
+  async function cutDirectory(sourcePath, destPath, node, destParentNode) {
+    try {
+      // Insert new node to destination path
+      const getNodeTreeReq = {
+        path: destPath,
+      }
+      const result = await GetNodeTree(getNodeTreeReq)
+      let newDirectoryNode = addNodeField(result)
+      insertNode(destParentNode, newDirectoryNode)
+
+      // Update opened file path
+      let paths = getNodePaths(node)
+      let newPaths = getNodePaths(newDirectoryNode)
+      paths.forEach(function (v, i) {
+        let op = v
+        let np = newPaths[i]
+        let file = parseFilepath(np)
+
+        if (openedFilesCheckExist(op)) {
+          openedFilesUpdateFile(op, {
+            id: np,
+            filePath: np,
+            fileName: file.name + '.' + file.extension,
+          })
+        }
+      })
+
+      // Reorder the destination parent
+      sortNodeChildren(destParentNode)
+
+      // Reindex tree parents
+      indexTreeParents()
+    } catch (err) {
+      console.error('Error update tree node after paste:', err)
+    }
   }
 
   async function copyFile(sourcePath, destPath, destParentNode) {
