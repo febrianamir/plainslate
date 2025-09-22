@@ -7,39 +7,39 @@ export async function handleEnter(e, callback) {
 
 export function debounce(func, delay) {
   let timeoutId
-  return function(...args) {
+  return function (...args) {
     clearTimeout(timeoutId)
     timeoutId = setTimeout(() => func.apply(this, args), delay)
   }
 }
 
 export function parseFilepath(filepath) {
-  const lastDotIndex = filepath.lastIndexOf('.');
-  const lastSlashIndex = Math.max(filepath.lastIndexOf('/'), filepath.lastIndexOf('\\'));
+  const lastDotIndex = filepath.lastIndexOf('.')
+  const lastSlashIndex = Math.max(filepath.lastIndexOf('/'), filepath.lastIndexOf('\\'))
 
   if (lastDotIndex === -1 || lastDotIndex < lastSlashIndex) {
     // No extension found
     return {
       name: filepath.substring(lastSlashIndex + 1),
-      extension: ''
-    };
+      extension: '',
+    }
   }
 
   const dirpath = filepath.substring(0, lastSlashIndex + 1)
-  const filename = filepath.substring(lastSlashIndex + 1, lastDotIndex);
-  const extension = filepath.substring(lastDotIndex + 1);
+  const filename = filepath.substring(lastSlashIndex + 1, lastDotIndex)
+  const extension = filepath.substring(lastDotIndex + 1)
 
-  return { dirpath: dirpath, name: filename, extension: extension };
+  return { dirpath: dirpath, name: filename, extension: extension }
 }
 
 export function getLastDirName(path) {
-  return path.replace(/\/+$/, '').split('/').pop();
+  return path.replace(/\/+$/, '').split('/').pop()
 }
 
 export function getParentDirPath(path) {
-  const clean = path.replace(/\/+$/, '');
-  const parts = clean.split('/');
-  const last = parts.pop();
-  const parentDirPath = parts.join('/');
+  const clean = path.replace(/\/+$/, '')
+  const parts = clean.split('/')
+  const last = parts.pop()
+  const parentDirPath = parts.join('/')
   return parentDirPath + '/'
 }
