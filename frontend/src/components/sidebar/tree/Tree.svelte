@@ -1,7 +1,7 @@
 <script>
   import TreeNode from './TreeNode.svelte'
   import ContextMenu from './ContextMenu.svelte'
-  import { openedFilesClose } from '../../../state/openedFile.svelte.js'
+  import { openedFilesUpdateFile, openedFilesCheckExist } from '../../../state/openedFile.svelte.js'
   import { clipboard, cleanClipboard } from '../../../state/clipboard.svelte.js'
   import {
     GetRootNodeTree,
@@ -199,21 +199,53 @@
       }
       await RenamePath(req)
 
-      // Move node to destination path
+      // Remove node from source path
       removeNode(clipboard.node)
 
       if (clipboard.node.type === 'file') {
+        // Insert new node to destination path
         clipboard.node.path = destPath
         insertNode(destParentNode, clipboard.node)
+
+        // Update opened file path
+        if (openedFilesCheckExist(sourcePath)) {
+          openedFilesUpdateFile(sourcePath, {
+            id: destPath,
+            filePath: destPath,
+            fileName: clipboard.filename,
+          })
+        }
       }
 
       if (clipboard.node.type === 'directory') {
-        const getNodeTreeReq = {
-          path: destPath,
+        try {
+          // Insert new node to destination path
+          const getNodeTreeReq = {
+            path: destPath,
+          }
+          const result = await GetNodeTree(getNodeTreeReq)
+          let newDirectoryNode = addNodeField(result)
+          insertNode(destParentNode, newDirectoryNode)
+
+          // Update opened file path
+          let paths = getNodePaths(clipboard.node)
+          let newPaths = getNodePaths(newDirectoryNode)
+          paths.forEach(function (v, i) {
+            let op = v
+            let np = newPaths[i]
+            let file = parseFilepath(np)
+
+            if (openedFilesCheckExist(op)) {
+              openedFilesUpdateFile(op, {
+                id: np,
+                filePath: np,
+                fileName: file.name + '.' + file.extension,
+              })
+            }
+          })
+        } catch (err) {
+          console.error('Error update tree node after paste:', err)
         }
-        const result = await GetNodeTree(getNodeTreeReq)
-        let newDirectoryNode = addNodeField(result)
-        insertNode(destParentNode, newDirectoryNode)
       }
 
       // Reorder the destination parent
@@ -390,6 +422,16 @@
       }
     }
     return map
+  }
+
+  function getNodePaths(node, paths = []) {
+    paths.push(node.path)
+    if (node.children) {
+      for (const child of node.children) {
+        getNodePaths(child, paths)
+      }
+    }
+    return paths
   }
 </script>
 
