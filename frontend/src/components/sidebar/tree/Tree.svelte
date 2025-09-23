@@ -1,7 +1,11 @@
 <script>
   import TreeNode from './TreeNode.svelte'
   import ContextMenu from './ContextMenu.svelte'
-  import { openedFilesUpdateFile, openedFilesCheckExist } from '../../../state/openedFile.svelte.js'
+  import {
+    openedFilesUpdateFile,
+    openedFilesCheckExist,
+    openedFilesClose,
+  } from '../../../state/openedFile.svelte.js'
   import { clipboard, cleanClipboard } from '../../../state/clipboard.svelte.js'
   import {
     GetRootNodeTree,
@@ -154,7 +158,18 @@
         path: moveToTrashNode.path,
       }
       await MoveToTrash(req)
-      openedFilesClose(moveToTrashNode.path)
+
+      if (moveToTrashNode.type === 'file') {
+        openedFilesClose(moveToTrashNode.path)
+      }
+
+      if (moveToTrashNode.type === 'directory') {
+        let paths = getNodePaths(moveToTrashNode)
+        paths.forEach(function (v, i) {
+          openedFilesClose(v)
+        })
+      }
+
       removeNode(moveToTrashNode)
       indexTreeParents()
     } catch (err) {
